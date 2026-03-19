@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リファレンス | LenovoServer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-secondary: #1a1a25;
+            --border-color: #2a2a35;
+            --text-primary: #ffffff;
+            --text-secondary: #888;
+            --accent: #5865F2;
+            --success: #00c853;
+            --warning: #ff9800;
+            --danger: #ff4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        .reference-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* サイドバー */
+        .ref-sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .ref-logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ref-logo span { color: var(--accent); }
+
+        .ref-nav-section {
+            margin-bottom: 20px;
+        }
+
+        .ref-nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .ref-nav-section a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .ref-nav-section a:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .ref-nav-section a.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* メインコンテンツ */
+        .ref-main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px 60px;
+            max-width: 1000px;
+        }
+
+        .ref-header {
+            margin-bottom: 40px;
+        }
+
+        .ref-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .ref-header p {
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        /* セクション */
+        .ref-section {
+            margin-bottom: 48px;
+        }
+
+        .ref-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+        }
+
+        .ref-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: var(--text-primary);
+        }
+
+        .ref-section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0 8px;
+            color: var(--text-secondary);
+        }
+
+        .ref-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        /* テーブル */
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            background: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ref-table th,
+        .ref-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ref-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .ref-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ref-table code {
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        /* コードブロック */
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: #e0e0e0;
+        }
+
+        .code-block .comment { color: #6a737d; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+
+        /* インラインコード */
+        code {
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        /* アラート */
+        .ref-alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .ref-alert i {
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .ref-alert-info {
+            background: rgba(88, 101, 242, 0.1);
+            border: 1px solid var(--accent);
+        }
+
+        .ref-alert-info i { color: var(--accent); }
+
+        .ref-alert-warning {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid var(--warning);
+        }
+
+        .ref-alert-warning i { color: var(--warning); }
+
+        .ref-alert-success {
+            background: rgba(0, 200, 83, 0.1);
+            border: 1px solid var(--success);
+        }
+
+        .ref-alert-success i { color: var(--success); }
+
+        /* FAQ */
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-secondary);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.open .faq-answer {
+            padding: 0 20px 16px;
+            max-height: 500px;
+        }
+
+        /* リスト */
+        .ref-section ul, .ref-section ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .ref-section li {
+            padding: 4px 0;
+            color: var(--text-secondary);
+        }
+
+        /* モバイル対応 */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1001;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .ref-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 1000;
+            }
+
+            .ref-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .ref-main {
+                margin-left: 0;
+                padding: 80px 20px 40px;
+            }
+
+            .ref-header h1 {
+                font-size: 28px;
+            }
+
+            .ref-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* フッター */
+        .ref-footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .ref-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .ref-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="reference-layout">
+        <!-- サイドバー -->
+        <nav class="ref-sidebar" id="sidebar">
+            <div class="ref-logo">
+                <a href="/" style="color: inherit; text-decoration: none;">
+                    Lenovo<span>Server</span>
+                </a>
+            </div>
+
+            <div class="ref-nav-section">
+                <div class="ref-nav-title">はじめに</div>
+                <a href="#overview">概要</a>
+                <a href="#getting-started">使い始める</a>
+            </div>
+
+            <div class="ref-nav-section">
+                <div class="ref-nav-title">SSH接続</div>
+                <a href="#ssh-info">接続情報</a>
+                <a href="#ssh-password">パスワード認証</a>
+                <a href="#ssh-key">公開鍵認証</a>
+            </div>
+
+            <div class="ref-nav-section">
+                <div class="ref-nav-title">サーバー</div>
+                <a href="#server-types">サーバータイプ</a>
+                <a href="#server-specs">スペック</a>
+                <a href="#base-packages">基本パッケージ</a>
+            </div>
+
+            <div class="ref-nav-section">
+                <div class="ref-nav-title">機能</div>
+                <a href="#dashboard">ダッシュボード</a>
+                <a href="#settings">設定</a>
+            </div>
+
+            <div class="ref-nav-section">
+                <div class="ref-nav-title">サポート</div>
+                <a href="#faq">よくある質問</a>
+                <a href="#troubleshooting">トラブルシューティング</a>
+            </div>
+        </nav>
+
+        <!-- メインコンテンツ -->
+        <main class="ref-main">
+            <header class="ref-header">
+                <h1><i class="fas fa-book"></i> ご利用ガイド</h1>
+                <p>LenovoServerの使い方ガイド</p>
+            </header>
+
+            <!-- 概要 -->
+            <section class="ref-section" id="overview">
+                <h2>概要</h2>
+                <p>
+                    LenovoServerは、Ubuntuベースの仮想サーバー環境を提供するサービスです。
+                    Discord Bot、Webアプリ、APIサーバーなど、様々なサービスを簡単にホスティングできます。
+                </p>
+                <div class="ref-alert ref-alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>無料で利用可能</strong><br>
+                        0.5 vCPU / 512MB メモリ / 1GB ストレージのサーバーを無料で利用できます。
+                    </div>
+                </div>
+            </section>
+
+            <!-- 使い始める -->
+            <section class="ref-section" id="getting-started">
+                <h2>使い始める</h2>
+                <h3>ステップ1: ログイン</h3>
+                <p>Discordアカウントでログインします。</p>
+                <ol>
+                    <li><a href="auth.html" style="color: var(--accent);">ログインページ</a>にアクセス</li>
+                    <li>「Discordでログイン」ボタンをクリック</li>
+                    <li>Discordで認証を許可</li>
+                </ol>
+
+                <h3>ステップ2: サーバー作成</h3>
+                <ol>
+                    <li>ダッシュボードで「新規作成」ボタンをクリック</li>
+                    <li>サーバー名を入力（英数字、ハイフン、アンダースコアのみ）</li>
+                    <li>サーバータイプを選択</li>
+                    <li>「作成」をクリック</li>
+                </ol>
+
+                <h3>ステップ3: SSH接続</h3>
+                <p>作成したサーバーにSSHで接続して、自由にカスタマイズできます。</p>
+                <div class="code-block">
+                    <pre><code>ssh srv-XXXXXXXX@106.73.68.66 -p 4104</code></pre>
+                </div>
+            </section>
+
+            <!-- SSH接続情報 -->
+            <section class="ref-section" id="ssh-info">
+                <h2>SSH接続</h2>
+                <h3>接続情報</h3>
+                <table class="ref-table">
+                    <tbody>
+                        <tr>
+                            <td><strong>ホスト</strong></td>
+                            <td><code>106.73.68.66</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ポート</strong></td>
+                            <td><code>4104</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ユーザー名</strong></td>
+                            <td>ダッシュボードで確認（<code>srv-XXXXXXXX</code>形式）</td>
+                        </tr>
+                        <tr>
+                            <td><strong>パスワード</strong></td>
+                            <td>ダッシュボードで確認（クリックでコピー）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- パスワード認証 -->
+            <section class="ref-section" id="ssh-password">
+                <h3>パスワード認証</h3>
+                <p>ダッシュボードに表示されるパスワードを使用して接続します。</p>
+                <ol>
+                    <li>ダッシュボードでサーバーを選択</li>
+                    <li>SSH接続情報を確認（パスワードはクリックでコピー可能）</li>
+                    <li>ターミナルで接続コマンドを実行</li>
+                    <li>パスワードを入力</li>
+                </ol>
+                <div class="code-block">
+                    <pre><code><span class="comment"># 接続コマンド</span>
+ssh srv-XXXXXXXX@106.73.68.66 -p 4104
+
+<span class="comment"># パスワードを聞かれるので入力</span>
+srv-XXXXXXXX@106.73.68.66's password: ********</code></pre>
+                </div>
+            </section>
+
+            <!-- 公開鍵認証 -->
+            <section class="ref-section" id="ssh-key">
+                <h3>SSH公開鍵認証（推奨）</h3>
+                <p>パスワードなしで安全に接続できます。一度設定すれば毎回パスワードを入力する必要がありません。</p>
+
+                <h4>1. 鍵の生成（持っていない場合）</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Windows (PowerShell) / Mac / Linux 共通</span>
+ssh-keygen -t ed25519
+
+<span class="comment"># 質問にはすべてEnterでOK</span></code></pre>
+                </div>
+
+                <h4>2. 公開鍵の確認</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Windows (PowerShell)</span>
+type $env:USERPROFILE\.ssh\id_ed25519.pub
+
+<span class="comment"># Mac / Linux</span>
+cat ~/.ssh/id_ed25519.pub</code></pre>
+                </div>
+                <p>表示される <code>ssh-ed25519 AAAA...</code> で始まる1行をコピーします。</p>
+
+                <h4>3. ダッシュボードで登録</h4>
+                <ol>
+                    <li>ダッシュボードの「設定」ページを開く</li>
+                    <li>「SSH公開鍵」セクションで「鍵を追加」をクリック</li>
+                    <li>名前を入力（例: <code>My PC</code>）</li>
+                    <li>公開鍵の内容を貼り付け</li>
+                    <li>「追加」をクリック</li>
+                </ol>
+
+                <h4>4. 接続テスト</h4>
+                <div class="code-block">
+                    <pre><code>ssh srv-XXXXXXXX@106.73.68.66 -p 4104
+
+<span class="comment"># パスワードを聞かれずに接続できれば成功！</span></code></pre>
+                </div>
+
+                <div class="ref-alert ref-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>ポイント</strong><br>
+                        登録した公開鍵は、あなたの全サーバーで使用できます。
+                        PCを複数お持ちの場合は、それぞれの公開鍵を登録してください。
+                    </div>
+                </div>
+            </section>
+
+            <!-- サーバータイプ -->
+            <section class="ref-section" id="server-types">
+                <h2>サーバータイプ</h2>
+                <p>用途に合わせてサーバータイプを選択できます。</p>
+                <table class="ref-table">
+                    <thead>
+                        <tr>
+                            <th>タイプ</th>
+                            <th>説明</th>
+                            <th>プリインストール</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ubuntu 22.04</strong></td>
+                            <td>純粋なUbuntu環境</td>
+                            <td>基本パッケージのみ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ubuntu + Node.js</strong></td>
+                            <td>Discord Bot、Webアプリ開発に最適</td>
+                            <td>Node.js 20, npm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ubuntu + Python</strong></td>
+                            <td>Python Bot、機械学習に最適</td>
+                            <td>Python 3.11, pip, venv</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ubuntu + Java</strong></td>
+                            <td>Minecraftサーバーなどに最適</td>
+                            <td>OpenJDK 17</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ubuntu + Go</strong></td>
+                            <td>高速なサーバー開発に最適</td>
+                            <td>Go 1.21</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ubuntu Full Stack</strong></td>
+                            <td>全部入り</td>
+                            <td>Node.js, Python, Java, Go</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 基本パッケージ -->
+            <section class="ref-section" id="base-packages">
+                <h3>基本パッケージ（全タイプ共通）</h3>
+                <p>すべてのサーバーに以下のツールがインストールされています：</p>
+                <table class="ref-table">
+                    <thead>
+                        <tr>
+                            <th>パッケージ</th>
+                            <th>用途</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>git</code></td><td>Gitリポジトリの操作</td></tr>
+                        <tr><td><code>curl</code></td><td>URLからデータを取得</td></tr>
+                        <tr><td><code>wget</code></td><td>ファイルのダウンロード</td></tr>
+                        <tr><td><code>vim</code> / <code>nano</code></td><td>テキストエディタ</td></tr>
+                        <tr><td><code>openssh-client</code></td><td>SSH接続・鍵生成</td></tr>
+                        <tr><td><code>sudo</code></td><td>管理者権限の実行</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- サーバースペック -->
+            <section class="ref-section" id="server-specs">
+                <h2>サーバースペック</h2>
+                <table class="ref-table">
+                    <thead>
+                        <tr>
+                            <th>リソース</th>
+                            <th>容量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>CPU</td><td>0.5 vCPU</td></tr>
+                        <tr><td>メモリ</td><td>512 MB</td></tr>
+                        <tr><td>ストレージ</td><td>1 GB</td></tr>
+                    </tbody>
+                </table>
+                <p>Discord Botや軽量なWebアプリには十分なスペックです。</p>
+            </section>
+
+            <!-- ダッシュボード -->
+            <section class="ref-section" id="dashboard">
+                <h2>ダッシュボード機能</h2>
+                <table class="ref-table">
+                    <thead>
+                        <tr>
+                            <th>メニュー</th>
+                            <th>機能</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><i class="fas fa-home"></i> 概要</td><td>サーバーの統計情報を確認</td></tr>
+                        <tr><td><i class="fas fa-server"></i> サーバー</td><td>サーバーの一覧表示・作成・管理</td></tr>
+                        <tr><td><i class="fas fa-terminal"></i> コンソール</td><td>ブラウザ上でターミナル操作</td></tr>
+                        <tr><td><i class="fas fa-folder"></i> ファイル</td><td>ファイルの閲覧・編集・アップロード</td></tr>
+                        <tr><td><i class="fas fa-code"></i> 環境変数</td><td>環境変数の設定</td></tr>
+                        <tr><td><i class="fas fa-cog"></i> 設定</td><td>アカウント設定・SSH鍵管理</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>サーバー操作</h3>
+                <table class="ref-table">
+                    <tbody>
+                        <tr><td><i class="fas fa-play" style="color: var(--success);"></i> 起動</td><td>停止中のサーバーを起動</td></tr>
+                        <tr><td><i class="fas fa-stop" style="color: var(--warning);"></i> 停止</td><td>稼働中のサーバーを停止</td></tr>
+                        <tr><td><i class="fas fa-redo" style="color: var(--accent);"></i> 再起動</td><td>サーバーを再起動</td></tr>
+                        <tr><td><i class="fas fa-trash" style="color: var(--danger);"></i> 削除</td><td>サーバーを完全に削除（復元不可）</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 設定 -->
+            <section class="ref-section" id="settings">
+                <h2>設定</h2>
+                <h3>起動コマンド</h3>
+                <p>サーバー起動時に自動実行されるコマンドを設定できます。</p>
+                <div class="code-block">
+                    <pre><code><span class="comment"># 例: Node.jsアプリを起動</span>
+node app.js
+
+<span class="comment"># 例: Pythonスクリプトを起動</span>
+python3 bot.py</code></pre>
+                </div>
+
+                <h3>環境変数</h3>
+                <p>Discord BotのトークンやAPIキーなど、秘密情報を環境変数として設定できます。</p>
+                <div class="code-block">
+                    <pre><code>DISCORD_TOKEN=your_token_here
+API_KEY=your_api_key</code></pre>
+                </div>
+                <p>プログラムから <code>process.env.DISCORD_TOKEN</code>（Node.js）や <code>os.environ['DISCORD_TOKEN']</code>（Python）で取得できます。</p>
+
+                <h3>自動再起動</h3>
+                <p>有効にすると、プログラムがクラッシュした場合に自動的に再起動します。</p>
+            </section>
+
+            <!-- よくある質問 -->
+            <section class="ref-section" id="faq">
+                <h2>よくある質問</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>無料で使えますか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        はい、無料でご利用いただけます。0.5 vCPU / 512MB メモリ / 1GB ストレージのサーバーを1台作成できます。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>どんな用途に使えますか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Discord Bot、Webアプリ、APIサーバー、Minecraftサーバー（軽量版）など、様々な用途にお使いいただけます。root権限があるので自由にカスタマイズ可能です。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>24時間稼働できますか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        はい、サーバーは24時間365日稼働します。自動再起動機能を有効にすれば、クラッシュ時も自動的に復旧します。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>SSH接続のパスワードを忘れました</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        ダッシュボードでサーバーを選択すると、SSH接続情報（ユーザー名・パスワード）を確認できます。パスワードはクリックでコピーできます。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>毎回パスワードを入力するのが面倒です</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        SSH公開鍵認証を設定すると、パスワードなしで接続できます。設定ページで公開鍵を登録してください。詳しくは<a href="#ssh-key" style="color: var(--accent);">公開鍵認証</a>をご覧ください。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>ファイルをアップロードするには？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        以下の方法があります：
+                        <ul style="margin-top: 8px;">
+                            <li>ダッシュボードのファイルマネージャーを使用</li>
+                            <li>Git経由でクローン（<code>git clone</code>）</li>
+                            <li>SCP/SFTPでアップロード</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Discordアカウントを持っていません</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        申し訳ありませんが、現在はDiscordアカウントでのログインのみ対応しています。<a href="https://discord.com/register" target="_blank" style="color: var(--accent);">こちら</a>から無料でDiscordアカウントを作成できます。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>サーバーを削除したらデータは消えますか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        はい、サーバーを削除するとすべてのデータが完全に削除され、復元できません。削除前に必要なデータはバックアップしてください。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>ポート開放はできますか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        現在、外部からのポート開放には対応していません。Discord Botなど、アウトバウンド通信のみで動作するサービスに最適です。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>どのプログラミング言語が使えますか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Ubuntu環境なので、ほぼすべての言語が使えます。サーバータイプで Node.js、Python、Java、Go がプリインストールされたものを選べます。その他の言語も <code>apt-get</code> でインストール可能です。
+                    </div>
+                </div>
+            </section>
+
+            <!-- トラブルシューティング -->
+            <section class="ref-section" id="troubleshooting">
+                <h2>トラブルシューティング</h2>
+
+                <h3>SSH接続でエラーが出る</h3>
+                <h4>「WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!」</h4>
+                <p>以下のコマンドで古いホストキーを削除してください：</p>
+                <div class="code-block">
+                    <pre><code>ssh-keygen -R "[106.73.68.66]:4104"</code></pre>
+                </div>
+
+                <h4>「Connection refused」</h4>
+                <p>サーバーが停止している可能性があります。ダッシュボードでサーバーを起動してください。</p>
+
+                <h3>SSH鍵認証ができない</h3>
+                <div class="ref-alert ref-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>確認ポイント</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>接続元PC の公開鍵を登録していますか？（サーバー内で生成した鍵ではなく）</li>
+                            <li>登録後30秒以上待ちましたか？</li>
+                            <li>サーバーは起動していますか？</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>コマンドが見つからない</h3>
+                <p>必要なパッケージがインストールされていない場合は、以下でインストールできます：</p>
+                <div class="code-block">
+                    <pre><code>apt-get update && apt-get install -y パッケージ名</code></pre>
+                </div>
+
+                <h3>プログラムが動かない</h3>
+                <ul>
+                    <li>エラーメッセージを確認してください</li>
+                    <li>必要な依存関係がインストールされているか確認</li>
+                    <li>環境変数が正しく設定されているか確認</li>
+                    <li>メモリ不足の場合は、軽量なプログラムを使用してください</li>
+                </ul>
+            </section>
+
+            <!-- フッター -->
+            <footer class="ref-footer">
+                <p>
+                    <a href="/">トップページに戻る</a> |
+                    <a href="dashboard.html">ダッシュボード</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function toggleFaq(element) {
+            element.parentElement.classList.toggle('open');
+        }
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // モバイルでサイドバーを閉じる
+                document.getElementById('sidebar').classList.remove('active');
+            });
+        });
+
+        // アクティブリンクのハイライト
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.ref-nav-section a').forEach(a => {
+                        a.classList.remove('active');
+                        if (a.getAttribute('href') === '#' + entry.target.id) {
+                            a.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: '-20% 0px -80% 0px' });
+
+        document.querySelectorAll('.ref-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

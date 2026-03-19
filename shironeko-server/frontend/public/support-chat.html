@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせチャット | LenovoServer</title>
+    <link rel="stylesheet" href="css/style.css?v=20260313-2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="support-chat-body">
+    <div class="support-chat-shell">
+        <header class="support-chat-header">
+            <div>
+                <h1><i class="fas fa-comments"></i> お問い合わせチャット <span class="support-chat-version">UI v2</span></h1>
+                <p id="support-chat-subtitle">問い合わせと返信をこの画面で完結できます</p>
+            </div>
+            <div class="support-chat-header-actions">
+                <div class="support-chat-user" id="support-chat-user">ログイン中...</div>
+                <a class="btn btn-secondary btn-small" href="/dashboard.html">
+                    <i class="fas fa-arrow-left"></i> ダッシュボードへ戻る
+                </a>
+                <button class="btn btn-secondary btn-small" id="support-chat-logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </header>
+
+        <main class="support-chat-main">
+            <section class="support-card support-chat-left">
+                <div class="support-chat-scope-row" id="support-chat-scope-row">
+                    <label class="form-label" for="chat-scope-select">表示範囲</label>
+                    <select class="form-select" id="chat-scope-select">
+                        <option value="mine">自分の問い合わせ</option>
+                        <option value="all">全ユーザー（管理者）</option>
+                    </select>
+                </div>
+                <p class="support-chat-note">
+                    問い合わせは下のタスクバーから選択できます。
+                </p>
+
+                <h3><i class="fas fa-pen"></i> 新規問い合わせ</h3>
+                <form id="chat-create-form" class="support-form">
+                    <div class="form-group">
+                        <label class="form-label">カテゴリ</label>
+                        <select class="form-select" id="chat-category" required>
+                            <option value="bug_report">バグ報告</option>
+                            <option value="question">質問</option>
+                            <option value="inquiry">お問い合わせ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">件名</label>
+                        <input type="text" class="form-input" id="chat-subject" maxlength="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">本文</label>
+                        <textarea class="form-input" id="chat-message" rows="5" maxlength="4000" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-paper-plane"></i> 送信
+                    </button>
+                </form>
+            </section>
+
+            <section class="support-card support-chat-right">
+                <div class="chat-taskbar-panel">
+                    <div class="chat-taskbar-head">
+                        <h3><i class="fas fa-layer-group"></i> 問い合わせタスクバー（下部）</h3>
+                        <div class="chat-taskbar-head-actions">
+                            <small class="text-muted" id="chat-taskbar-count">0件</small>
+                            <button class="btn btn-secondary btn-small" id="chat-taskbar-refresh-btn">
+                                <i class="fas fa-rotate"></i> 更新
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chat-taskbar" id="chat-taskbar">
+                        <div class="text-muted text-center" style="padding: 0.8rem;">読み込み中...</div>
+                    </div>
+                </div>
+
+                <div class="support-thread-header">
+                    <div>
+                        <h3 id="chat-thread-title"><i class="fas fa-comments"></i> 問い合わせ詳細</h3>
+                        <div class="support-thread-meta" id="chat-thread-meta">下のタスクバーから問い合わせを選択してください</div>
+                    </div>
+                    <span class="support-status-badge status-open" id="chat-thread-status">未選択</span>
+                </div>
+
+                <div class="support-chat-admin-status" id="support-chat-admin-status">
+                    <select class="form-select" id="chat-admin-status">
+                        <option value="waiting_admin">運営対応待ち</option>
+                        <option value="waiting_user">ユーザー返信待ち</option>
+                        <option value="open">受付中</option>
+                        <option value="closed">完了</option>
+                    </select>
+                    <button class="btn btn-secondary btn-small" id="chat-admin-status-btn">
+                        <i class="fas fa-check"></i> 状態更新
+                    </button>
+                </div>
+
+                <div class="support-thread-messages" id="chat-thread-messages">
+                    <div class="text-muted text-center" style="padding: 2rem;">下のタスクバーから問い合わせを選択してください</div>
+                </div>
+
+                <div class="support-reply-box">
+                    <textarea class="form-input" id="chat-reply-input" rows="5" maxlength="4000" placeholder="返信を入力..." disabled></textarea>
+                    <div class="support-reply-actions">
+                        <button class="btn btn-secondary btn-small" id="chat-toggle-status-btn" disabled>
+                            <i class="fas fa-check"></i> 完了にする
+                        </button>
+                        <button class="btn btn-primary" id="chat-send-reply-btn" disabled>
+                            <i class="fas fa-reply"></i> 返信を送信
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+    <script src="js/support-chat.js?v=20260313-2"></script>
+</body>
+</html>

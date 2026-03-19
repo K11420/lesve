@@ -1,0 +1,118 @@
+# ShironekoServer Production Docker Compose
+services:
+  lenovo-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lenovo-server
+    restart: unless-stopped
+    ports:
+      - "4103:4103"
+    volumes:
+      # Docker ソケットをマウント（コンテナ管理用）
+      - /var/run/docker.sock:/var/run/docker.sock
+      # libvirt ソケットをマウント（VMスペック取得用）
+      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
+      # データ永続化
+      - lenovo-data:/app/data
+      # コンテナ用ディレクトリ
+      - lenovo-containers:/app/data/containers
+      # バックアップ用ディレクトリ
+      - lenovo-backups:/app/data/backups
+    environment:
+      - NODE_ENV=production
+      - PORT=4103
+      - SSH_PORT=4104
+      - PUBLIC_HOST=lenovo.schale41.jp
+      - SSH_HOST=106.73.68.66
+      - ADMIN_HOST=manage.schale41.jp
+      - JWT_SECRET=${JWT_SECRET:-lenovo-production-secret-2024-secure}
+      - DATA_DIR=/app/data
+      - CONTAINERS_DIR=/app/data/containers
+      - BACKUPS_DIR=/app/data/backups
+      - DB_PATH=/app/data/lenovo.db
+      - LIBVIRT_DEFAULT_URI=qemu:///system
+      # Discord OAuth設定 (.envファイルで設定)
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID:-}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET:-}
+      - DISCORD_REDIRECT_URI=https://lenovo.schale41.jp/api/auth/discord/callback
+      # Cloudflare Turnstile設定 (.envファイルで設定)
+      - TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY:-}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY:-}
+      # Stripe設定
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_PRICE_STANDARD=${STRIPE_PRICE_STANDARD:-}
+      - STRIPE_PRICE_PRO=${STRIPE_PRICE_PRO:-}
+      - STRIPE_STANDARD_COUPON_ID=${STRIPE_STANDARD_COUPON_ID:-}
+    networks:
+      - lenovo-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4103/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # SSHゲートウェイ - 単一ポート4104でユーザー名によるコンテナ接続
+  ssh-gateway:
+    build:
+      context: ./ssh-gateway
+      dockerfile: Dockerfile
+    container_name: lenovo-ssh-gateway
+    restart: unless-stopped
+    ports:
+      - "4104:22"  # ホストのポート4104をSSHゲートウェイのポート22にマッピング
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
+    environment:
+      - API_URL=http://lenovo-server:4103
+      - SSH_PORT=4104
+      - LIBVIRT_DEFAULT_URI=qemu:///system
+    depends_on:
+      - lenovo-server
+    networks:
+      - lenovo-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # オプション: Nginx リバースプロキシ
+  nginx:
+    image: nginx:alpine
+    container_name: lenovo-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - lenovo-server
+    networks:
+      - lenovo-network
+    profiles:
+      - with-nginx
+
+volumes:
+  lenovo-data:
+    name: lenovo-data
+  lenovo-containers:
+    name: lenovo-containers
+  lenovo-backups:
+    name: lenovo-backups
+
+networks:
+  lenovo-network:
+    name: lenovo-network
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "true"

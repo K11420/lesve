@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利用規約 | LenovoServer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-hover: #1a1a25;
+            --border-color: #2a2a35;
+            --text-primary: #ffffff;
+            --text-secondary: #888;
+            --accent: #5865F2;
+            --warning: #ff9800;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .logo span { color: var(--accent); }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .terms-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .terms-content {
+            max-height: 560px;
+            overflow-y: auto;
+            padding-right: 20px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .terms-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terms-content::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+            border-radius: 4px;
+        }
+
+        .terms-content::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .terms-content h2 {
+            color: var(--accent);
+            font-size: 18px;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .terms-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .terms-content p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .terms-content ol, .terms-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .terms-content li {
+            margin-bottom: 8px;
+        }
+
+        .legal-links {
+            background: rgba(88, 101, 242, 0.1);
+            border: 1px solid rgba(88, 101, 242, 0.35);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 20px;
+            color: #cfd4ff;
+            font-size: 14px;
+        }
+
+        .legal-links a {
+            color: #cfd4ff;
+            text-decoration: underline;
+        }
+
+        .agree-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-discord {
+            background: #5865F2;
+            color: white;
+        }
+
+        .btn-discord:hover {
+            background: #4752c4;
+        }
+
+        .btn-discord:disabled {
+            background: #444;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .note {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .revision {
+            margin-top: 30px;
+            text-align: right;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .terms-card {
+                padding: 20px;
+            }
+
+            .terms-content {
+                max-height: 460px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Lenovo<span>Server</span></div>
+            <h1><i class="fas fa-file-contract"></i> 利用規約</h1>
+        </div>
+
+        <div class="terms-card">
+            <div class="legal-links">
+                法的表示:
+                <a href="/tokushoho.html" target="_blank" rel="noopener noreferrer">特定商取引法に基づく表記</a>
+            </div>
+
+            <div class="terms-content" id="terms-content">
+                <h2>第1条（適用）</h2>
+                <ol>
+                    <li>本規約は、LenovoServer（以下「当サービス」）が提供するサーバーホスティング関連サービスの利用条件を定めるものです。</li>
+                    <li>ユーザーは、本規約に同意の上で当サービスを利用するものとします。</li>
+                    <li>当サービスが別途定める個別ルール、ガイドライン、プラン説明、料金表は本規約の一部を構成します。</li>
+                </ol>
+
+                <h2>第2条（利用登録）</h2>
+                <ol>
+                    <li>利用登録は、当サービス所定の方法で申請し、当サービスが承認した時点で成立します。</li>
+                    <li>当サービスは、申請内容に虚偽がある場合、または当サービス運営上不適切と判断した場合、登録を拒否または保留できます。</li>
+                </ol>
+
+                <h2>第3条（アカウント管理）</h2>
+                <ol>
+                    <li>ユーザーは、自己の責任でログイン情報・認証情報（パスワード、パスキー、TOTP情報等）を管理してください。</li>
+                    <li>第三者による不正利用が判明した場合、ユーザーは直ちに当サービスへ通知してください。</li>
+                </ol>
+
+                <h2>第4条（サービス内容）</h2>
+                <ol>
+                    <li>当サービスは、Web管理画面、SSH接続、Webターミナル、ファイル管理、バックアップ等の機能を提供します。</li>
+                    <li>提供機能・仕様・UIは、品質向上または運用上の必要に応じて変更されることがあります。</li>
+                    <li>ユーザーは、法令・本規約・第三者権利を侵害しない範囲でのみ本サービスを利用できます。</li>
+                </ol>
+
+                <h2>第5条（料金・課金・契約期間）</h2>
+                <ol>
+                    <li>有料プランの料金、課金周期、上限値はダッシュボードおよび料金表示ページに定めるとおりです。</li>
+                    <li>有料プランはサブスクリプション契約です。契約は各請求期間の終了時に自動更新されます。</li>
+                    <li>決済はStripe等の外部決済事業者を通じて行われます。ユーザーは決済事業者の規約にも従うものとします。</li>
+                    <li>料金は、法令上必要な場合を除き、日割り返金を行いません。</li>
+                </ol>
+
+                <h2>第6条（解約・プラン変更）</h2>
+                <ol>
+                    <li>ユーザーは、ダッシュボードの「サブスク管理」から将来分の自動更新停止（解約）を行えます。</li>
+                    <li>解約後も、すでに支払済み期間の満了までは有料プラン機能を利用できる場合があります。</li>
+                    <li>解約・ダウングレード時に、プラン上限を超えるリソース設定は調整または制限されることがあります。</li>
+                </ol>
+
+                <h2>第7条（禁止事項）</h2>
+                <p>ユーザーは、以下の行為をしてはなりません。</p>
+                <ol>
+                    <li>法令、公序良俗または本規約に違反する行為</li>
+                    <li>不正アクセス、脆弱性悪用、DDoS、スパム配信、マルウェア配布等の攻撃行為</li>
+                    <li>著作権・商標権・プライバシー権その他第三者権利を侵害する行為</li>
+                    <li>違法コンテンツの保存・配信、仮想通貨マイニング等、当サービス運営を著しく阻害する行為</li>
+                    <li>当サービスが不適切と判断する行為</li>
+                </ol>
+
+                <h2>第8条（利用制限・停止）</h2>
+                <ol>
+                    <li>当サービスは、本規約違反または運用上の必要がある場合、事前通知なく利用制限・停止・データ隔離等の措置を行うことができます。</li>
+                    <li>当サービスは、保守、障害、災害、外部サービス障害等により、全部または一部を一時停止できるものとします。</li>
+                </ol>
+
+                <h2>第9条（データの取扱い）</h2>
+                <ol>
+                    <li>ユーザーは、自己の責任でデータのバックアップを行うものとします。</li>
+                    <li>当サービスは、障害時の復旧に努めますが、データ消失・破損の完全な回避を保証しません。</li>
+                    <li>法令、捜査協力、利用規約違反対応等で必要な場合、当サービスは保存データ等を確認または開示することがあります。</li>
+                </ol>
+
+                <h2>第10条（知的財産権）</h2>
+                <p>当サービスに関するプログラム、デザイン、商標、文書その他の知的財産権は、当サービスまたは正当な権利者に帰属します。</p>
+
+                <h2>第11条（免責）</h2>
+                <ol>
+                    <li>当サービスは、明示または黙示を問わず、特定目的適合性、完全性、有用性、継続性を保証しません。</li>
+                    <li>当サービスの故意または重過失による場合を除き、ユーザーに生じた損害について責任を負いません。</li>
+                    <li>ユーザー間または第三者との紛争は、当事者間で解決するものとします。</li>
+                </ol>
+
+                <h2>第12条（規約変更）</h2>
+                <ol>
+                    <li>当サービスは、必要に応じて本規約を変更できます。</li>
+                    <li>重要な変更を行う場合、変更内容および効力発生日を事前に当サービス上で告知します。</li>
+                </ol>
+
+                <h2>第13条（準拠法・管轄）</h2>
+                <ol>
+                    <li>本規約は日本法に準拠します。</li>
+                    <li>本サービスに関する紛争は、当サービス運営者所在地を管轄する裁判所を第一審の専属的合意管轄とします。</li>
+                </ol>
+
+                <p class="revision">
+                    制定日: 2024年12月31日<br>
+                    最終改定日: 2026年3月9日
+                </p>
+            </div>
+
+            <div class="agree-section">
+                <p class="note">
+                    <i class="fas fa-info-circle"></i>
+                    サービスを利用するには、上記の利用規約への同意が必要です。
+                </p>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="agree-checkbox">
+                    <label for="agree-checkbox">上記の利用規約に同意します</label>
+                </div>
+
+                <button class="btn btn-discord" id="login-btn" disabled onclick="loginWithDiscord()">
+                    <i class="fab fa-discord"></i> Discordでログイン
+                </button>
+
+                <div>
+                    <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> トップページに戻る</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const checkbox = document.getElementById('agree-checkbox');
+        const loginBtn = document.getElementById('login-btn');
+
+        checkbox.addEventListener('change', function() {
+            loginBtn.disabled = !this.checked;
+        });
+
+        function loginWithDiscord() {
+            if (!checkbox.checked) {
+                alert('利用規約に同意してください');
+                return;
+            }
+            sessionStorage.setItem('terms_agreed', 'true');
+            window.location.href = '/api/auth/discord';
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        if (error) {
+            const messages = {
+                'terms_required': '利用規約に同意してください',
+                'token_failed': 'Discord認証に失敗しました',
+                'user_failed': 'ユーザー情報の取得に失敗しました',
+                'server_error': 'サーバーエラーが発生しました'
+            };
+            alert(messages[error] || 'エラーが発生しました');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>ログイン | LenovoServer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        .discord-btn {
+            background: #5865F2;
+            color: white;
+            border: none;
+            padding: 18px 32px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            transition: all 0.2s;
+            min-height: 56px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .discord-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+        }
+        .discord-btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        .discord-btn i {
+            font-size: 24px;
+        }
+        .error-message {
+            background: #ff4444;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .auth-features {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+        .auth-features h3 {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feature-list li {
+            color: #aaa;
+            font-size: 13px;
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feature-list li i {
+            color: #5865F2;
+        }
+        .terms-notice {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(88, 101, 242, 0.1);
+            border: 1px solid rgba(88, 101, 242, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .terms-notice a {
+            color: #5865F2;
+            text-decoration: none;
+        }
+        .terms-notice a:hover {
+            text-decoration: underline;
+        }
+        
+        /* モバイル対応 */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            .auth-container {
+                min-height: calc(100vh - 32px);
+            }
+            
+            .auth-card {
+                padding: 24px 20px;
+                margin: 0;
+                border-radius: 16px;
+            }
+            
+            .auth-title {
+                font-size: 28px;
+            }
+            
+            .auth-subtitle {
+                font-size: 14px;
+            }
+            
+            .discord-btn {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
+            
+            .terms-notice {
+                padding: 12px;
+            }
+            
+            .auth-features {
+                margin-top: 24px;
+                padding-top: 16px;
+            }
+            
+            .feature-list li {
+                font-size: 13px;
+                padding: 8px 0;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .auth-card {
+                padding: 20px 16px;
+            }
+            
+            .auth-title {
+                font-size: 24px;
+            }
+            
+            .discord-btn {
+                font-size: 15px;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- 通常ログイン画面 -->
+        <div class="auth-card" id="login-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Lenovo<span class="highlight">Server</span></h1>
+                <p class="auth-subtitle">ログイン方法を選択</p>
+            </div>
+
+            <div id="error-message" class="error-message"></div>
+
+            <!-- Cloudflare Turnstile -->
+            <div id="turnstile-container" style="display: none; margin-bottom: 20px;">
+                <div id="turnstile-widget"></div>
+                <p id="turnstile-status" style="font-size: 12px; color: #888; margin-top: 8px; text-align: center;"></p>
+            </div>
+
+            <!-- パスキーログイン -->
+            <button id="passkey-login-btn" onclick="loginWithPasskey()" class="discord-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-bottom: 12px;">
+                <i class="fas fa-fingerprint"></i>
+                <span>パスキーでログイン</span>
+            </button>
+            
+            <div style="text-align: center; margin: 16px 0; color: #666; font-size: 13px;">
+                <span style="display: inline-flex; align-items: center; gap: 12px;">
+                    <span style="flex: 1; height: 1px; background: #333; min-width: 40px;"></span>
+                    または
+                    <span style="flex: 1; height: 1px; background: #333; min-width: 40px;"></span>
+                </span>
+            </div>
+
+            <!-- Discordログイン -->
+            <button id="discord-login-btn" onclick="loginWithDiscord()" class="discord-btn" disabled>
+                <i class="fab fa-discord"></i>
+                <span id="btn-text">読み込み中...</span>
+            </button>
+            <p style="font-size: 11px; color: #888; text-align: center; margin-top: 8px;">
+                ※ 二段階認証が有効な場合、追加認証が必要です
+            </p>
+            
+            <div class="terms-notice">
+                <small>
+                    ログインすることで、<a href="/terms.html" target="_blank">利用規約</a>に同意したものとみなされます。
+                    <a href="/tokushoho.html" target="_blank">特定商取引法に基づく表記</a>をご確認ください。
+                </small>
+            </div>
+
+            <div class="auth-features">
+                <h3>LenovoServerの特徴</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Ubuntu 22.04ベースのサーバー</li>
+                    <li><i class="fas fa-check"></i> SSH接続でフルアクセス</li>
+                    <li><i class="fas fa-check"></i> Webターミナル対応</li>
+                    <li><i class="fas fa-check"></i> ファイル管理機能</li>
+                    <li><i class="fas fa-check"></i> 環境変数設定</li>
+                </ul>
+            </div>
+
+            <div class="mt-3 text-center">
+                <a href="/" class="text-muted"><i class="fas fa-arrow-left"></i> トップページに戻る</a>
+            </div>
+        </div>
+
+        <!-- 2FA認証画面 -->
+        <div class="auth-card" id="twofa-card" style="display: none;">
+            <div class="auth-header">
+                <h1 class="auth-title">Lenovo<span class="highlight">Server</span></h1>
+                <p class="auth-subtitle">二段階認証</p>
+            </div>
+
+            <div id="twofa-error" class="error-message"></div>
+
+            <!-- パスキー認証 -->
+            <div id="passkey-auth" style="display: none;">
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-fingerprint" style="font-size: 64px; color: #5865F2; margin-bottom: 16px;"></i>
+                    <p style="margin-bottom: 20px;">パスキーで認証してください</p>
+                    <button onclick="authenticatePasskey()" class="discord-btn" style="background: #5865F2;">
+                        <i class="fas fa-fingerprint"></i>
+                        パスキーで認証
+                    </button>
+                </div>
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="#" onclick="switchToTOTP(); return false;" style="color: #888; font-size: 13px;">
+                        認証アプリを使用する
+                    </a>
+                </div>
+            </div>
+
+            <!-- TOTP認証 -->
+            <div id="totp-auth" style="display: none;">
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-mobile-alt" style="font-size: 64px; color: #5865F2; margin-bottom: 16px;"></i>
+                    <p style="margin-bottom: 20px;">認証アプリのコードを入力してください</p>
+                    <input type="text" id="totp-code" class="form-input" 
+                        placeholder="6桁のコード" maxlength="6" pattern="[0-9A-Za-z]{6,8}"
+                        style="text-align: center; font-size: 24px; letter-spacing: 8px; max-width: 200px; margin: 0 auto 16px;">
+                    <button onclick="authenticateTOTP()" class="discord-btn" style="background: #5865F2;">
+                        <i class="fas fa-check"></i>
+                        認証
+                    </button>
+                    <p style="font-size: 12px; color: #888; margin-top: 12px;">
+                        バックアップコードも使用できます
+                    </p>
+                </div>
+                <div style="text-align: center; margin-top: 16px;" id="switch-to-passkey-link">
+                    <a href="#" onclick="switchToPasskey(); return false;" style="color: #888; font-size: 13px;">
+                        パスキーを使用する
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <a href="/auth.html" class="text-muted"><i class="fas fa-arrow-left"></i> ログインに戻る</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 状態管理
+        let turnstileEnabled = false;
+        let turnstileVerified = false;
+        let turnstileSessionId = null;
+        
+        // URLパラメータからエラーを表示
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const redirect = urlParams.get('redirect');
+        
+        // リダイレクト先を保存（localStorageも使用してスマホ対応）
+        if (redirect) {
+            sessionStorage.setItem('auth_redirect', redirect);
+            localStorage.setItem('auth_redirect', redirect);
+        }
+        
+        if (error) {
+            const errorEl = document.getElementById('error-message');
+            const messages = {
+                'no_code': '認証コードが取得できませんでした',
+                'token_failed': 'Discordからのトークン取得に失敗しました',
+                'user_failed': 'Discordユーザー情報の取得に失敗しました',
+                'server_error': 'サーバーエラーが発生しました',
+                'terms_required': '利用規約に同意してください',
+                'turnstile_required': 'セキュリティ認証が必要です',
+                'turnstile_expired': 'セキュリティ認証の有効期限が切れました。再度お試しください'
+            };
+            errorEl.textContent = messages[error] || 'ログインに失敗しました';
+            errorEl.classList.add('show');
+        }
+
+        // 既にログイン済みならリダイレクト
+        const token = localStorage.getItem('token');
+        if (token) {
+            const savedRedirect = sessionStorage.getItem('auth_redirect') || localStorage.getItem('auth_redirect');
+            if (savedRedirect) {
+                sessionStorage.removeItem('auth_redirect');
+                localStorage.removeItem('auth_redirect');
+                // トークン付きでリダイレクト
+                window.location.href = savedRedirect + (savedRedirect.includes('?') ? '&' : '?') + 'token=' + token;
+            } else {
+                window.location.href = '/dashboard.html';
+            }
+        }
+
+        // Turnstile設定を取得して初期化
+        async function initTurnstile() {
+            try {
+                const response = await fetch('/api/turnstile/config');
+                const config = await response.json();
+                
+                if (config.enabled && config.siteKey) {
+                    turnstileEnabled = true;
+                    document.getElementById('turnstile-container').style.display = 'block';
+                    document.getElementById('turnstile-status').textContent = 'セキュリティ認証を完了してください';
+                    
+                    // Turnstileウィジェットをレンダリング
+                    if (window.turnstile) {
+                        renderTurnstile(config.siteKey);
+                    } else {
+                        // スクリプトがまだ読み込まれていない場合は待機
+                        window.onloadTurnstileCallback = () => renderTurnstile(config.siteKey);
+                    }
+                } else {
+                    // Turnstileが無効の場合、直接ログインを許可
+                    enableLoginButton();
+                }
+            } catch (e) {
+                console.error('Turnstile config error:', e);
+                // エラー時は直接ログインを許可
+                enableLoginButton();
+            }
+        }
+        
+        // Turnstileウィジェットをレンダリング
+        function renderTurnstile(siteKey) {
+            turnstile.render('#turnstile-widget', {
+                sitekey: siteKey,
+                theme: 'dark',
+                callback: onTurnstileSuccess,
+                'error-callback': onTurnstileError,
+                'expired-callback': onTurnstileExpired
+            });
+        }
+        
+        // Turnstile成功時
+        async function onTurnstileSuccess(token) {
+            document.getElementById('turnstile-status').textContent = '認証中...';
+            
+            try {
+                const response = await fetch('/api/turnstile/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    turnstileVerified = true;
+                    turnstileSessionId = result.sessionId;
+                    document.getElementById('turnstile-status').textContent = '✓ 認証完了';
+                    document.getElementById('turnstile-status').style.color = '#4ade80';
+                    enableLoginButton();
+                } else {
+                    document.getElementById('turnstile-status').textContent = '認証に失敗しました。再度お試しください';
+                    document.getElementById('turnstile-status').style.color = '#ff6b6b';
+                    turnstile.reset();
+                }
+            } catch (e) {
+                console.error('Turnstile verify error:', e);
+                document.getElementById('turnstile-status').textContent = 'エラーが発生しました';
+                document.getElementById('turnstile-status').style.color = '#ff6b6b';
+            }
+        }
+        
+        // Turnstileエラー時
+        function onTurnstileError() {
+            document.getElementById('turnstile-status').textContent = '認証エラー。再読み込みしてください';
+            document.getElementById('turnstile-status').style.color = '#ff6b6b';
+        }
+        
+        // Turnstile期限切れ時
+        function onTurnstileExpired() {
+            turnstileVerified = false;
+            turnstileSessionId = null;
+            document.getElementById('turnstile-status').textContent = '認証の有効期限が切れました。再度認証してください';
+            document.getElementById('turnstile-status').style.color = '#f59e0b';
+            disableLoginButton();
+            turnstile.reset();
+        }
+        
+        // ログインボタンを有効化
+        function enableLoginButton() {
+            const btn = document.getElementById('discord-login-btn');
+            btn.disabled = false;
+            document.getElementById('btn-text').textContent = 'Discordでログイン';
+        }
+        
+        // ログインボタンを無効化
+        function disableLoginButton() {
+            const btn = document.getElementById('discord-login-btn');
+            btn.disabled = true;
+            document.getElementById('btn-text').textContent = 'セキュリティ認証が必要です';
+        }
+
+        function loginWithDiscord() {
+            // Turnstileが有効だが認証されていない場合
+            if (turnstileEnabled && !turnstileVerified) {
+                alert('セキュリティ認証を完了してください');
+                return;
+            }
+            
+            // リダイレクト先をAPIに渡す
+            const savedRedirect = sessionStorage.getItem('auth_redirect') || localStorage.getItem('auth_redirect') || '';
+            let url = '/api/auth/discord';
+            const params = new URLSearchParams();
+            
+            if (savedRedirect) {
+                params.set('redirect', savedRedirect);
+            }
+            
+            if (turnstileSessionId) {
+                params.set('session', turnstileSessionId);
+            }
+            
+            if (params.toString()) {
+                url += '?' + params.toString();
+            }
+            
+            window.location.href = url;
+        }
+        
+        // パスキーでログイン（単独ログイン）
+        async function loginWithPasskey() {
+            try {
+                // WebAuthnがサポートされているか確認
+                if (!window.PublicKeyCredential) {
+                    alert('このブラウザはパスキーに対応していません');
+                    return;
+                }
+                
+                // 認証オプションを取得
+                const startResponse = await fetch('/api/auth/passkey/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!startResponse.ok) {
+                    const err = await startResponse.json();
+                    throw new Error(err.error || 'パスキーログインの開始に失敗しました');
+                }
+                
+                const options = await startResponse.json();
+                const { sessionId, ...publicKeyOptions } = options;
+                
+                // WebAuthn API呼び出し（Discoverable Credentials）
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        ...publicKeyOptions,
+                        challenge: base64URLToBuffer(publicKeyOptions.challenge),
+                        allowCredentials: publicKeyOptions.allowCredentials?.map(c => ({
+                            ...c,
+                            id: base64URLToBuffer(c.id)
+                        })) || []
+                    }
+                });
+                
+                // 認証レスポンスを構築
+                const authResponse = {
+                    id: credential.id,
+                    rawId: bufferToBase64URL(credential.rawId),
+                    response: {
+                        clientDataJSON: bufferToBase64URL(credential.response.clientDataJSON),
+                        authenticatorData: bufferToBase64URL(credential.response.authenticatorData),
+                        signature: bufferToBase64URL(credential.response.signature),
+                        userHandle: credential.response.userHandle ? bufferToBase64URL(credential.response.userHandle) : null
+                    },
+                    type: credential.type
+                };
+                
+                // サーバーで検証
+                const verifyResponse = await fetch('/api/auth/passkey/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId, response: authResponse })
+                });
+                
+                const result = await verifyResponse.json();
+                
+                if (result.success && result.token) {
+                    // トークンを保存
+                    localStorage.setItem('token', result.token);
+                    
+                    // リダイレクト
+                    const savedRedirect = sessionStorage.getItem('auth_redirect') || localStorage.getItem('auth_redirect');
+                    sessionStorage.removeItem('auth_redirect');
+                    localStorage.removeItem('auth_redirect');
+                    
+                    if (savedRedirect && savedRedirect.startsWith('https://')) {
+                        const separator = savedRedirect.includes('?') ? '&' : '?';
+                        window.location.href = `${savedRedirect}${separator}token=${result.token}`;
+                    } else {
+                        window.location.href = '/dashboard.html?token=' + result.token;
+                    }
+                } else {
+                    const errorEl = document.getElementById('error-message');
+                    errorEl.textContent = result.error || 'パスキー認証に失敗しました';
+                    errorEl.classList.add('show');
+                }
+            } catch (error) {
+                const errorEl = document.getElementById('error-message');
+                if (error.name === 'NotAllowedError') {
+                    errorEl.textContent = 'パスキーの認証がキャンセルされました';
+                } else {
+                    errorEl.textContent = 'パスキーログインに失敗しました: ' + error.message;
+                }
+                errorEl.classList.add('show');
+            }
+        }
+        
+        // ============ 2FA認証処理 ============
+        
+        let pendingToken = null;
+        let twofaRedirect = null;
+        let twofaType = null;
+        
+        // 2FA認証が必要か確認
+        function check2FARequired() {
+            const require2fa = urlParams.get('require2fa');
+            pendingToken = urlParams.get('pending');
+            twofaRedirect = urlParams.get('redirect') || '';
+            
+            if (require2fa && pendingToken) {
+                twofaType = require2fa;
+                show2FAScreen(require2fa);
+                return true;
+            }
+            return false;
+        }
+        
+        // 2FA画面を表示
+        function show2FAScreen(type) {
+            document.getElementById('login-card').style.display = 'none';
+            document.getElementById('twofa-card').style.display = 'block';
+            
+            if (type === 'passkey') {
+                document.getElementById('passkey-auth').style.display = 'block';
+                document.getElementById('totp-auth').style.display = 'none';
+                // 自動でパスキー認証を開始
+                setTimeout(() => authenticatePasskey(), 500);
+            } else {
+                document.getElementById('passkey-auth').style.display = 'none';
+                document.getElementById('totp-auth').style.display = 'block';
+                document.getElementById('totp-code').focus();
+                // パスキーへの切り替えリンクを非表示（TOTPのみの場合）
+                document.getElementById('switch-to-passkey-link').style.display = 'none';
+            }
+        }
+        
+        // パスキーに切り替え
+        function switchToPasskey() {
+            document.getElementById('passkey-auth').style.display = 'block';
+            document.getElementById('totp-auth').style.display = 'none';
+            authenticatePasskey();
+        }
+        
+        // TOTPに切り替え
+        function switchToTOTP() {
+            document.getElementById('passkey-auth').style.display = 'none';
+            document.getElementById('totp-auth').style.display = 'block';
+            document.getElementById('totp-code').focus();
+        }
+        
+        // パスキー認証
+        async function authenticatePasskey() {
+            try {
+                // 認証オプションを取得
+                const response = await fetch('/api/passkeys/authenticate/options', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pendingToken })
+                });
+                
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || '認証オプションの取得に失敗しました');
+                }
+                
+                const options = await response.json();
+                
+                // WebAuthn API呼び出し
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        ...options,
+                        challenge: base64URLToBuffer(options.challenge),
+                        allowCredentials: options.allowCredentials?.map(c => ({
+                            ...c,
+                            id: base64URLToBuffer(c.id)
+                        })) || []
+                    }
+                });
+                
+                // 認証を検証
+                const authResponse = {
+                    id: credential.id,
+                    rawId: bufferToBase64URL(credential.rawId),
+                    response: {
+                        clientDataJSON: bufferToBase64URL(credential.response.clientDataJSON),
+                        authenticatorData: bufferToBase64URL(credential.response.authenticatorData),
+                        signature: bufferToBase64URL(credential.response.signature),
+                        userHandle: credential.response.userHandle ? bufferToBase64URL(credential.response.userHandle) : null
+                    },
+                    type: credential.type
+                };
+                
+                const verifyResponse = await fetch('/api/passkeys/authenticate/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pendingToken, response: authResponse })
+                });
+                
+                const result = await verifyResponse.json();
+                
+                if (result.success && result.token) {
+                    // トークンを保存してリダイレクト
+                    localStorage.setItem('token', result.token);
+                    redirectAfter2FA(result.token);
+                } else {
+                    show2FAError(result.error || '認証に失敗しました');
+                }
+            } catch (error) {
+                if (error.name === 'NotAllowedError') {
+                    show2FAError('パスキーの認証がキャンセルされました');
+                } else {
+                    show2FAError('認証に失敗しました: ' + error.message);
+                }
+            }
+        }
+        
+        // TOTP認証
+        async function authenticateTOTP() {
+            const code = document.getElementById('totp-code').value.trim();
+            
+            if (!code) {
+                show2FAError('認証コードを入力してください');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/totp/authenticate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pendingToken, code })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.token) {
+                    if (result.warning) {
+                        alert(result.warning);
+                    }
+                    localStorage.setItem('token', result.token);
+                    redirectAfter2FA(result.token);
+                } else {
+                    show2FAError(result.error || '認証に失敗しました');
+                }
+            } catch (error) {
+                show2FAError('認証に失敗しました: ' + error.message);
+            }
+        }
+        
+        // 2FAエラー表示
+        function show2FAError(message) {
+            const errorEl = document.getElementById('twofa-error');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+        
+        // 2FA後のリダイレクト
+        function redirectAfter2FA(token) {
+            const savedRedirect = twofaRedirect || sessionStorage.getItem('auth_redirect') || localStorage.getItem('auth_redirect');
+            sessionStorage.removeItem('auth_redirect');
+            localStorage.removeItem('auth_redirect');
+            
+            if (savedRedirect && savedRedirect.startsWith('https://')) {
+                const separator = savedRedirect.includes('?') ? '&' : '?';
+                window.location.href = `${savedRedirect}${separator}token=${token}`;
+            } else {
+                window.location.href = '/dashboard.html?token=' + token;
+            }
+        }
+        
+        // Base64URL変換ユーティリティ
+        function base64URLToBuffer(base64url) {
+            const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+            const padding = '='.repeat((4 - base64.length % 4) % 4);
+            const binary = atob(base64 + padding);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+        
+        function bufferToBase64URL(buffer) {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        }
+        
+        // Enterキーでの認証送信
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('totp-code') === document.activeElement) {
+                authenticateTOTP();
+            }
+        });
+        
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 2FA認証が必要かチェック
+            if (!check2FARequired()) {
+                // 通常のTurnstile初期化
+                initTurnstile();
+            }
+        });
+    </script>
+</body>
+</html>

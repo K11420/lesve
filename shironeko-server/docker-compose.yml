@@ -1,0 +1,190 @@
+# ShironekoServer Production Docker Compose
+services:
+  shironeko-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shironeko-server
+    restart: unless-stopped
+    ports:
+      - "4103:4103"
+    volumes:
+      # Docker ソケットをマウント（コンテナ管理用）
+      - /var/run/docker.sock:/var/run/docker.sock
+      # libvirt ソケットをマウント（VMスペック取得用）
+      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
+      # VMディスク保存先（ホストと共有）
+      - /srv/vmdata/libvirt-images:/tmp/libvirt-images
+      # データ永続化
+      - shironeko-data:/app/data
+      # コンテナ用ディレクトリ
+      - shironeko-containers:/app/data/containers
+      # バックアップ用ディレクトリ
+      - shironeko-backups:/app/data/backups
+    environment:
+      - NODE_ENV=production
+      - PORT=4103
+      - SSH_PORT=4104
+      - PUBLIC_HOST=lesve.tech
+      - CHAT_HOST=${CHAT_HOST:-}
+      - SSH_HOST=106.73.68.66
+      - ADMIN_HOST=manage.lesve.tech
+      - JWT_SECRET=${JWT_SECRET?JWT_SECRET is required}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-}
+      - DATA_DIR=/app/data
+      - CONTAINERS_DIR=/app/data/containers
+      - BACKUPS_DIR=/app/data/backups
+      - DB_PATH=/app/data/shironeko.db
+      - LIBVIRT_DEFAULT_URI=qemu:///system
+      - VM_CREATE_DEFAULT_BACKEND=${VM_CREATE_DEFAULT_BACKEND:-vm}
+      - VM_PROVISION_SCRIPT=${VM_PROVISION_SCRIPT:-/app/scripts/provision-lenovo-vm.sh}
+      - VM_PROVISION_BRIDGE=${VM_PROVISION_BRIDGE:-virbr0}
+      - VM_POOL_DIR=${VM_POOL_DIR:-/tmp/libvirt-images}
+      - VM_BASE_IMAGE_URL=${VM_BASE_IMAGE_URL:-https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img}
+      - VM_PROVISION_TIMEOUT_MS=${VM_PROVISION_TIMEOUT_MS:-420000}
+      # Discord OAuth設定 (.envファイルで設定)
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID:-}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET:-}
+      - DISCORD_REDIRECT_URI=https://lesve.tech/api/auth/discord/callback
+      - DISCORD_SUPPORT_WEBHOOK_URL=${DISCORD_SUPPORT_WEBHOOK_URL:-}
+      - DISCORD_SUPPORT_NOTIFY_MENTION=${DISCORD_SUPPORT_NOTIFY_MENTION:-}
+      - DISCORD_COMPLIANCE_WEBHOOK_URL=${DISCORD_COMPLIANCE_WEBHOOK_URL:-}
+      - DISCORD_COMPLIANCE_NOTIFY_MENTION=${DISCORD_COMPLIANCE_NOTIFY_MENTION:-}
+      - DISCORD_OPS_WEBHOOK_URL=${DISCORD_OPS_WEBHOOK_URL:-}
+      - DISCORD_OPS_NOTIFY_MENTION=${DISCORD_OPS_NOTIFY_MENTION:-}
+      # Cloudflare Turnstile設定 (.envファイルで設定)
+      - TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY:-}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY:-}
+      # Stripe設定
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_PRICE_STANDARD=${STRIPE_PRICE_STANDARD:-}
+      - STRIPE_PRICE_PRO=${STRIPE_PRICE_PRO:-}
+      - STRIPE_STANDARD_COUPON_ID=${STRIPE_STANDARD_COUPON_ID:-}
+      - STRIPE_PAYMENT_METHOD_TYPES=${STRIPE_PAYMENT_METHOD_TYPES:-}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
+      # Bulk mailer settings
+      - MAILER_ENABLED=${MAILER_ENABLED:-false}
+      - MAILER_SMTP_HOST=${MAILER_SMTP_HOST:-}
+      - MAILER_SMTP_PORT=${MAILER_SMTP_PORT:-587}
+      - MAILER_SMTP_SECURE=${MAILER_SMTP_SECURE:-false}
+      - MAILER_SMTP_USER=${MAILER_SMTP_USER:-}
+      - MAILER_SMTP_PASS=${MAILER_SMTP_PASS:-}
+      - MAILER_SMTP_REJECT_UNAUTHORIZED=${MAILER_SMTP_REJECT_UNAUTHORIZED:-true}
+      - MAILER_FROM_EMAIL=${MAILER_FROM_EMAIL:-}
+      - MAILER_FROM_NAME=${MAILER_FROM_NAME:-LenovoServer}
+      - MAILER_REPLY_TO=${MAILER_REPLY_TO:-}
+      - MAILER_MAX_RECIPIENTS=${MAILER_MAX_RECIPIENTS:-3000}
+      - MAILER_SEND_DELAY_MS=${MAILER_SEND_DELAY_MS:-120}
+      - NOTIFY_EMAIL_TO=${NOTIFY_EMAIL_TO:-koutarou114@outlook.jp}
+      - NOTIFY_SUBJECT_PREFIX=${NOTIFY_SUBJECT_PREFIX:-[LenovoServer]}
+      # Backup/monitoring/rate-limit controls
+      - AUTO_BACKUP_ENABLED=${AUTO_BACKUP_ENABLED:-true}
+      - AUTO_BACKUP_MODE=${AUTO_BACKUP_MODE:-full}
+      - AUTO_BACKUP_STARTUP_MODE=${AUTO_BACKUP_STARTUP_MODE:-db}
+      - AUTO_BACKUP_INTERVAL_MINUTES=${AUTO_BACKUP_INTERVAL_MINUTES:-1440}
+      - AUTO_BACKUP_TIMEOUT_MINUTES=${AUTO_BACKUP_TIMEOUT_MINUTES:-180}
+      - AUTO_BACKUP_RETENTION_DAYS=${AUTO_BACKUP_RETENTION_DAYS:-14}
+      - AUTO_BACKUP_RESTORE_CHECK_ENABLED=${AUTO_BACKUP_RESTORE_CHECK_ENABLED:-true}
+      - AUTO_BACKUP_NOTIFY_ENABLED=${AUTO_BACKUP_NOTIFY_ENABLED:-true}
+      - SYSTEM_MONITOR_ENABLED=${SYSTEM_MONITOR_ENABLED:-true}
+      - SYSTEM_MONITOR_INTERVAL_SECONDS=${SYSTEM_MONITOR_INTERVAL_SECONDS:-300}
+      - SYSTEM_MONITOR_ALERT_COOLDOWN_MINUTES=${SYSTEM_MONITOR_ALERT_COOLDOWN_MINUTES:-30}
+      - SYSTEM_MONITOR_DISK_WARN_PERCENT=${SYSTEM_MONITOR_DISK_WARN_PERCENT:-85}
+      - SYSTEM_MONITOR_DB_WARN_MB=${SYSTEM_MONITOR_DB_WARN_MB:-2048}
+      - SYSTEM_MONITOR_RSS_WARN_MB=${SYSTEM_MONITOR_RSS_WARN_MB:-900}
+      - SYSTEM_MONITOR_API_5XX_WINDOW_SECONDS=${SYSTEM_MONITOR_API_5XX_WINDOW_SECONDS:-300}
+      - SYSTEM_MONITOR_API_5XX_WARN_COUNT=${SYSTEM_MONITOR_API_5XX_WARN_COUNT:-5}
+      - SYSTEM_MONITOR_BACKUP_STALE_MINUTES=${SYSTEM_MONITOR_BACKUP_STALE_MINUTES:-2880}
+      - SYSTEM_MONITOR_BACKUP_FAILURE_WINDOW_MINUTES=${SYSTEM_MONITOR_BACKUP_FAILURE_WINDOW_MINUTES:-180}
+      - SYSTEM_MONITOR_BACKUP_FAILURE_WARN_COUNT=${SYSTEM_MONITOR_BACKUP_FAILURE_WARN_COUNT:-1}
+      - SYSTEM_MONITOR_STRIPE_FAILURE_WINDOW_MINUTES=${SYSTEM_MONITOR_STRIPE_FAILURE_WINDOW_MINUTES:-180}
+      - SYSTEM_MONITOR_STRIPE_FAILURE_WARN_COUNT=${SYSTEM_MONITOR_STRIPE_FAILURE_WARN_COUNT:-1}
+      - SYSTEM_MONITOR_VM_STOPPED_GRACE_MINUTES=${SYSTEM_MONITOR_VM_STOPPED_GRACE_MINUTES:-10}
+      - SYSTEM_MONITOR_VM_STOPPED_CHECK_LIMIT=${SYSTEM_MONITOR_VM_STOPPED_CHECK_LIMIT:-30}
+      - RATE_LIMIT_ENABLED=${RATE_LIMIT_ENABLED:-true}
+      - RATE_LIMIT_AUTH_WINDOW_SEC=${RATE_LIMIT_AUTH_WINDOW_SEC:-60}
+      - RATE_LIMIT_AUTH_MAX=${RATE_LIMIT_AUTH_MAX:-20}
+      - RATE_LIMIT_SUPPORT_CREATE_WINDOW_SEC=${RATE_LIMIT_SUPPORT_CREATE_WINDOW_SEC:-600}
+      - RATE_LIMIT_SUPPORT_CREATE_MAX=${RATE_LIMIT_SUPPORT_CREATE_MAX:-6}
+      - RATE_LIMIT_SUPPORT_REPLY_WINDOW_SEC=${RATE_LIMIT_SUPPORT_REPLY_WINDOW_SEC:-600}
+      - RATE_LIMIT_SUPPORT_REPLY_MAX=${RATE_LIMIT_SUPPORT_REPLY_MAX:-30}
+      - RATE_LIMIT_BILLING_WINDOW_SEC=${RATE_LIMIT_BILLING_WINDOW_SEC:-600}
+      - RATE_LIMIT_BILLING_MAX=${RATE_LIMIT_BILLING_MAX:-30}
+      - RATE_LIMIT_ADMIN_WINDOW_SEC=${RATE_LIMIT_ADMIN_WINDOW_SEC:-60}
+      - RATE_LIMIT_ADMIN_MAX=${RATE_LIMIT_ADMIN_MAX:-120}
+    networks:
+      - shironeko-network
+      - mailserver-default
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4103/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # SSHゲートウェイ - 単一ポート4104でユーザー名によるコンテナ接続
+  ssh-gateway:
+    build:
+      context: ./ssh-gateway
+      dockerfile: Dockerfile
+    container_name: shironeko-ssh-gateway
+    restart: unless-stopped
+    ports:
+      - "4104:22"  # ホストのポート4104をSSHゲートウェイのポート22にマッピング
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
+    environment:
+      - API_URL=http://shironeko-server:4103
+      - SSH_PORT=4104
+      - LIBVIRT_DEFAULT_URI=qemu:///system
+    depends_on:
+      - shironeko-server
+    networks:
+      - shironeko-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # オプション: Nginx リバースプロキシ
+  nginx:
+    image: nginx:alpine
+    container_name: shironeko-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - shironeko-server
+    networks:
+      - shironeko-network
+    profiles:
+      - with-nginx
+
+volumes:
+  shironeko-data:
+    name: shironeko-data
+  shironeko-containers:
+    name: shironeko-containers
+  shironeko-backups:
+    name: shironeko-backups
+
+networks:
+  shironeko-network:
+    name: shironeko-network
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+  mailserver-default:
+    name: mailserver_default
+    external: true

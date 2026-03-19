@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>お問い合わせチャット | LenovoServer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chat.css?v=20260318-10">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="chat-page">
+    <div class="chat-app">
+        <aside class="chat-sidebar">
+            <div class="chat-sidebar-head">
+                <h1><i class="fas fa-comments"></i> サポートチャット</h1>
+                <p>お問い合わせ</p>
+            </div>
+
+            <div class="chat-history-section" id="chat-history-section">
+                <div class="chat-sidebar-tools">
+                    <button class="btn btn-primary btn-small" id="chat-new-btn">
+                        <i class="fas fa-plus"></i> 新しいチャット
+                    </button>
+                    <button class="btn btn-secondary btn-small" id="chat-refresh-btn">
+                        <i class="fas fa-rotate"></i> 更新
+                    </button>
+                </div>
+
+                <div class="chat-sidebar-search">
+                    <input id="chat-history-search" class="form-input" placeholder="履歴を検索（件名・ID）">
+                </div>
+
+                <div id="chat-ticket-list" class="chat-ticket-list">
+                    <div class="chat-empty">読み込み中...</div>
+                </div>
+            </div>
+
+            <div class="chat-sidebar-footer">
+                <div class="chat-user-meta" id="chat-user">ログイン情報を確認中...</div>
+                <select id="chat-scope" class="form-select" style="display:none;">
+                    <option value="mine">自分の履歴</option>
+                    <option value="all">全履歴（管理者）</option>
+                </select>
+                <a class="btn btn-secondary btn-small" href="/dashboard.html">
+                    <i class="fas fa-table-columns"></i> ダッシュボード
+                </a>
+                <button class="btn btn-secondary btn-small" id="chat-logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </aside>
+
+        <section class="chat-main">
+            <header class="chat-main-head">
+                <div>
+                    <h2 id="chat-thread-title"><i class="fas fa-comment-dots"></i> 新しいチャット</h2>
+                    <p id="chat-thread-meta">メッセージを送ると問い合わせが開始されます</p>
+                </div>
+                <div class="chat-main-head-actions">
+                    <span id="chat-thread-status" class="chat-status status-open">新規</span>
+                    <button class="btn btn-danger btn-small" id="chat-delete-ticket-btn" disabled>
+                        <i class="fas fa-trash"></i> 削除
+                    </button>
+                    <button class="btn btn-secondary btn-small" id="chat-toggle-status-btn" disabled>
+                        <i class="fas fa-check"></i> 完了にする
+                    </button>
+                </div>
+            </header>
+
+            <div id="chat-thread-messages" class="chat-thread-messages">
+                <div class="chat-empty">そのままメッセージを送ってチャットを開始してください。</div>
+            </div>
+
+            <div class="chat-composer">
+                <textarea class="form-input" id="chat-reply-input" rows="4" maxlength="4000" placeholder="ここにメッセージを入力（Enter送信 / Shift+Enter改行）"></textarea>
+                <div class="chat-composer-actions">
+                    <small id="chat-ticket-count" class="text-muted">0件</small>
+                    <button class="btn btn-primary" id="chat-send-reply-btn">
+                        <i class="fas fa-paper-plane"></i> 送信
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="chat-toast" class="chat-toast"></div>
+
+    <script src="/js/chat.js?v=20260318-11"></script>
+</body>
+</html>

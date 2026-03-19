@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0;url=/admin.html">
+    <script>
+        (() => {
+            const query = window.location.search || '';
+            const hash = window.location.hash || '';
+            window.location.replace(`/admin.html${query}${hash}`);
+        })();
+    </script>
+</head>
+<body>
+    <p><a href="/admin.html">admin.html</a> へ移動します。</p>
+</body>
+</html>

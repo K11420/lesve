@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>ログイン | LenovoServer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .discord-btn {
+            background: #5865F2;
+            color: white;
+            border: none;
+            padding: 18px 32px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            transition: all 0.2s;
+            min-height: 56px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .discord-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+        }
+        .discord-btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        .discord-btn i {
+            font-size: 24px;
+        }
+        .error-message {
+            background: #ff4444;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .auth-features {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+        .auth-features h3 {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feature-list li {
+            color: #aaa;
+            font-size: 13px;
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feature-list li i {
+            color: #5865F2;
+        }
+        .terms-notice {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(88, 101, 242, 0.1);
+            border: 1px solid rgba(88, 101, 242, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .terms-notice a {
+            color: #5865F2;
+            text-decoration: none;
+        }
+        .terms-notice a:hover {
+            text-decoration: underline;
+        }
+
+        .email-auth-panel {
+            margin-top: 14px;
+            padding: 14px;
+            background: rgba(17, 24, 39, 0.65);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 10px;
+        }
+
+        .email-auth-title {
+            font-size: 13px;
+            color: #a5b4fc;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .email-auth-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .email-auth-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .email-auth-btn {
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            background: rgba(67, 56, 202, 0.24);
+            color: #e5e7eb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .email-auth-btn:hover {
+            background: rgba(79, 70, 229, 0.35);
+        }
+
+        .email-auth-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .email-auth-help {
+            margin-top: 8px;
+            color: #9ca3af;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .turnstile-slot {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        .security-status {
+            margin-top: 10px;
+            color: #9ca3af;
+            font-size: 11px;
+            text-align: center;
+            min-height: 16px;
+        }
+
+        .security-status.warn {
+            color: #f59e0b;
+        }
+
+        .security-status.error {
+            color: #f87171;
+        }
+
+        .security-status.ok {
+            color: #4ade80;
+        }
+
+        .alt-login-wrap {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #333;
+        }
+
+        .alt-login-toggle {
+            width: 100%;
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            background: rgba(17, 24, 39, 0.4);
+            color: #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .alt-login-toggle:hover {
+            border-color: rgba(99, 102, 241, 0.45);
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .alt-login-body {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .alt-login-body.show {
+            display: block;
+        }
+
+        .alt-login-note {
+            font-size: 11px;
+            color: #888;
+            text-align: center;
+            margin-top: 8px;
+        }
+        
+        /* モバイル対応 */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            .auth-container {
+                min-height: calc(100vh - 32px);
+            }
+            
+            .auth-card {
+                padding: 24px 20px;
+                margin: 0;
+                border-radius: 16px;
+            }
+            
+            .auth-title {
+                font-size: 28px;
+            }
+            
+            .auth-subtitle {
+                font-size: 14px;
+            }
+            
+            .discord-btn {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
+            
+            .terms-notice {
+                padding: 12px;
+            }
+
+            .email-auth-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-features {
+                margin-top: 24px;
+                padding-top: 16px;
+            }
+            
+            .feature-list li {
+                font-size: 13px;
+                padding: 8px 0;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .auth-card {
+                padding: 20px 16px;
+            }
+            
+            .auth-title {
+                font-size: 24px;
+            }
+            
+            .discord-btn {
+                font-size: 15px;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- 通常ログイン画面 -->
+        <div class="auth-card" id="login-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Lenovo<span class="highlight">Server</span></h1>
+                <p class="auth-subtitle">ログイン</p>
+            </div>
+
+            <div id="error-message" class="error-message"></div>
+
+            <div class="email-auth-panel">
+                <div class="email-auth-title"><i class="fas fa-envelope"></i> メールアドレスで利用する</div>
+                <div class="email-auth-grid">
+                    <input type="email" id="email-auth-email" class="form-input" placeholder="メールアドレス">
+                    <input type="password" id="email-auth-password" class="form-input" placeholder="パスワード（8文字以上）">
+                </div>
+                <div class="email-auth-actions">
+                    <button id="email-login-btn" class="email-auth-btn" onclick="loginWithEmail()" disabled>
+                        <i class="fas fa-right-to-bracket"></i> メールでログイン
+                    </button>
+                </div>
+                <p class="email-auth-help">
+                    メールアドレスとパスワードでログインできます。
+                </p>
+                <p class="email-auth-help" style="margin-top: 6px;">
+                    新規登録は <a href="/register.html" style="color: #93c5fd;">こちら</a>
+                </p>
+            </div>
+
+            <div class="alt-login-wrap">
+                <button id="alt-login-toggle" type="button" class="alt-login-toggle" onclick="toggleAltLogin()">
+                    <i class="fas fa-ellipsis-h"></i>
+                    <span id="alt-login-toggle-text">その他のログイン方法を表示</span>
+                </button>
+                <div id="alt-login-body" class="alt-login-body">
+                    <button id="discord-login-btn" onclick="loginWithDiscord()" class="discord-btn" disabled>
+                        <i class="fab fa-discord"></i>
+                        <span id="btn-text">Discordでログイン</span>
+                    </button>
+                    <p class="alt-login-note">
+                        ※ 二段階認証が有効な場合、追加認証が必要です
+                    </p>
+                </div>
+            </div>
+            
+            <div class="terms-notice">
+                <small>
+                    ログインすることで、<a href="/terms.html" target="_blank">利用規約</a>に同意したものとみなされます。
+                    <a href="/privacy.html" target="_blank">プライバシーポリシー</a>および
+                    <a href="/tokushoho.html" target="_blank">特定商取引法に基づく表記</a>をご確認ください。
+                    使い方は <a href="/reference" target="_blank">リファレンス</a> を参照してください。
+                </small>
+            </div>
+
+            <div class="auth-features">
+                <h3>LenovoServerの特徴</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Ubuntu 22.04ベースのサーバー</li>
+                    <li><i class="fas fa-check"></i> SSH接続でフルアクセス</li>
+                    <li><i class="fas fa-check"></i> Webターミナル対応</li>
+                    <li><i class="fas fa-check"></i> ファイル管理機能</li>
+                    <li><i class="fas fa-check"></i> 環境変数設定</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- 2FA認証画面 -->
+        <div class="auth-card" id="twofa-card" style="display: none;">
+            <div class="auth-header">
+                <h1 class="auth-title">Lenovo<span class="highlight">Server</span></h1>
+                <p class="auth-subtitle">二段階認証</p>
+            </div>
+
+            <div id="twofa-error" class="error-message"></div>
+
+            <!-- パスキー認証 -->
+            <div id="passkey-auth" style="display: none;">
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-fingerprint" style="font-size: 64px; color: #5865F2; margin-bottom: 16px;"></i>
+                    <p style="margin-bottom: 20px;">パスキーで認証してください</p>
+                    <button onclick="authenticatePasskey()" class="discord-btn" style="background: #5865F2;">
+                        <i class="fas fa-fingerprint"></i>
+                        パスキーで認証
+                    </button>
+                </div>
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="#" onclick="switchToTOTP(); return false;" style="color: #888; font-size: 13px;">
+                        認証アプリを使用する
+                    </a>
+                </div>
+            </div>
+
+            <!-- TOTP認証 -->
+            <div id="totp-auth" style="display: none;">
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-mobile-alt" style="font-size: 64px; color: #5865F2; margin-bottom: 16px;"></i>
+                    <p style="margin-bottom: 20px;">認証アプリのコードを入力してください</p>
+                    <input type="text" id="totp-code" class="form-input" 
+                        placeholder="6桁のコード" maxlength="6" pattern="[0-9A-Za-z]{6,8}"
+                        style="text-align: center; font-size: 24px; letter-spacing: 8px; max-width: 200px; margin: 0 auto 16px;">
+                    <button onclick="authenticateTOTP()" class="discord-btn" style="background: #5865F2;">
+                        <i class="fas fa-check"></i>
+                        認証
+                    </button>
+                    <p style="font-size: 12px; color: #888; margin-top: 12px;">
+                        バックアップコードも使用できます
+                    </p>
+                </div>
+                <div style="text-align: center; margin-top: 16px;" id="switch-to-passkey-link">
+                    <a href="#" onclick="switchToPasskey(); return false;" style="color: #888; font-size: 13px;">
+                        パスキーを使用する
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <a href="/auth.html" class="text-muted"><i class="fas fa-arrow-left"></i> ログインに戻る</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 状態管理
+        let turnstileEnabled = false;
+        let turnstileSessionId = null;
+        let turnstileWidgetId = null;
+        let turnstileScriptPromise = null;
+        let turnstileSessionPromise = null;
+        let turnstileSessionResolver = null;
+        let turnstileSessionRejecter = null;
+        let turnstileBusy = false;
+        let emailAuthBusy = false;
+        
+        // URLパラメータからエラーを表示
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const redirectValues = urlParams.getAll('redirect')
+            .map((v) => String(v || '').trim())
+            .filter(Boolean);
+        const redirect = redirectValues.length ? redirectValues[redirectValues.length - 1] : '';
+        const TRUSTED_REDIRECT_HOSTS = new Set([
+            window.location.hostname.toLowerCase(),
+            'lesve.tech',
+            'www.lesve.tech',
+            'manage.lesve.tech'
+        ]);
+
+        function isTrustedRedirectHost(hostname) {
+            const host = String(hostname || '').toLowerCase();
+            if (!host) return false;
+            if (TRUSTED_REDIRECT_HOSTS.has(host)) return true;
+            return host.endsWith('.lesve.tech');
+        }
+
+        function sanitizeRedirectTarget(rawValue) {
+            const value = String(rawValue || '').trim();
+            if (!value) return '';
+            try {
+                const parsed = new URL(value, window.location.origin);
+                if (!['https:', 'http:'].includes(parsed.protocol)) return '';
+                if (!isTrustedRedirectHost(parsed.hostname)) return '';
+                parsed.searchParams.delete('token');
+                parsed.searchParams.delete('redirect');
+
+                const authPaths = new Set(['/auth', '/auth/', '/auth.html']);
+                const path = parsed.pathname || '/dashboard.html';
+                parsed.pathname = authPaths.has(path) ? '/dashboard.html' : path;
+
+                const search = parsed.searchParams.toString();
+                const relative = `${parsed.pathname}${search ? `?${search}` : ''}${parsed.hash || ''}`;
+                if (parsed.origin === window.location.origin) {
+                    return relative;
+                }
+                return `${parsed.origin}${relative}`;
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function buildRedirectWithToken(target, tokenValue = '') {
+            const cleaned = sanitizeRedirectTarget(target);
+            if (!cleaned) return '';
+
+            try {
+                const parsed = new URL(cleaned, window.location.origin);
+                if (tokenValue && parsed.origin !== window.location.origin) {
+                    parsed.searchParams.set('token', tokenValue);
+                }
+                const search = parsed.searchParams.toString();
+                if (parsed.origin === window.location.origin) {
+                    return `${parsed.pathname}${search ? `?${search}` : ''}${parsed.hash || ''}`;
+                }
+                return parsed.toString();
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function toAbsoluteRedirectUrl(target) {
+            const cleaned = sanitizeRedirectTarget(target);
+            if (!cleaned) return '';
+            try {
+                return new URL(cleaned, window.location.origin).toString();
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function clearSavedRedirect() {
+            sessionStorage.removeItem('auth_redirect');
+            localStorage.removeItem('auth_redirect');
+        }
+
+        function setSavedRedirect(rawValue) {
+            const cleaned = sanitizeRedirectTarget(rawValue);
+            if (cleaned) {
+                sessionStorage.setItem('auth_redirect', cleaned);
+                localStorage.setItem('auth_redirect', cleaned);
+            } else {
+                clearSavedRedirect();
+            }
+            return cleaned;
+        }
+
+        function getSavedRedirect() {
+            const stored = sessionStorage.getItem('auth_redirect') || localStorage.getItem('auth_redirect') || '';
+            const cleaned = sanitizeRedirectTarget(stored);
+            if (!cleaned) {
+                clearSavedRedirect();
+            }
+            return cleaned;
+        }
+
+        function redirectAfterLogin(tokenValue, preferredRedirect = '') {
+            if (tokenValue) {
+                localStorage.setItem('token', tokenValue);
+            }
+            const preferred = buildRedirectWithToken(preferredRedirect, tokenValue);
+            if (preferred) {
+                clearSavedRedirect();
+                window.location.href = preferred;
+                return;
+            }
+            const savedRedirect = buildRedirectWithToken(getSavedRedirect(), tokenValue);
+            clearSavedRedirect();
+            if (savedRedirect) {
+                window.location.href = savedRedirect;
+                return;
+            }
+            window.location.href = '/dashboard.html';
+        }
+        
+        // リダイレクト先を保存（localStorageも使用してスマホ対応）
+        if (redirect) {
+            setSavedRedirect(redirect);
+        }
+        
+        if (error) {
+            const errorEl = document.getElementById('error-message');
+            const messages = {
+                'no_code': '認証コードが取得できませんでした',
+                'token_failed': 'Discordからのトークン取得に失敗しました',
+                'user_failed': 'Discordユーザー情報の取得に失敗しました',
+                'server_error': 'サーバーエラーが発生しました',
+                'terms_required': '利用規約に同意してください',
+                'turnstile_required': 'セキュリティ認証が必要です',
+                'turnstile_expired': 'セキュリティ認証の有効期限が切れました。再度お試しください'
+            };
+            errorEl.textContent = messages[error] || 'ログインに失敗しました';
+            errorEl.classList.add('show');
+        }
+
+        // 既にログイン済みならリダイレクト
+        const token = localStorage.getItem('token');
+        if (token) {
+            redirectAfterLogin(token);
+        }
+
+        function showLoginError(message) {
+            const errorEl = document.getElementById('error-message');
+            if (!errorEl) return;
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+
+        function clearLoginError() {
+            const errorEl = document.getElementById('error-message');
+            if (!errorEl) return;
+            errorEl.classList.remove('show');
+            errorEl.textContent = '';
+        }
+
+        function finishLoginWithToken(token) {
+            redirectAfterLogin(token);
+        }
+
+        function setEmailAuthBusy(busy) {
+            emailAuthBusy = !!busy;
+            if (emailAuthBusy || turnstileBusy) {
+                disableLoginButton('処理中...');
+            } else {
+                enableLoginButton();
+            }
+        }
+
+        function setEmailAuthButtonsEnabled(enabled) {
+            const emailLoginBtn = document.getElementById('email-login-btn');
+            const active = !!enabled && !emailAuthBusy;
+            if (emailLoginBtn) emailLoginBtn.disabled = !active;
+        }
+
+        function setTurnstileStatus(message = '', level = '') {
+            const statusEl = document.getElementById('turnstile-status');
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.className = 'security-status';
+            if (level) {
+                statusEl.classList.add(level);
+            }
+        }
+
+        function clearTurnstileSession() {
+            turnstileSessionId = null;
+        }
+
+        function resolveTurnstileSession(sessionId) {
+            turnstileSessionId = sessionId;
+            if (typeof turnstileSessionResolver === 'function') {
+                turnstileSessionResolver(sessionId);
+            }
+            turnstileSessionResolver = null;
+            turnstileSessionRejecter = null;
+            turnstileSessionPromise = null;
+            turnstileBusy = false;
+            if (!emailAuthBusy) {
+                enableLoginButton();
+            }
+        }
+
+        function rejectTurnstileSession(message) {
+            clearTurnstileSession();
+            if (typeof turnstileSessionRejecter === 'function') {
+                turnstileSessionRejecter(new Error(message));
+            } else if (message) {
+                showLoginError(message);
+            }
+            turnstileSessionResolver = null;
+            turnstileSessionRejecter = null;
+            turnstileSessionPromise = null;
+            turnstileBusy = false;
+            if (!emailAuthBusy) {
+                enableLoginButton();
+            }
+        }
+
+        async function ensureTurnstileScriptLoaded() {
+            if (window.turnstile && typeof window.turnstile.render === 'function') {
+                return true;
+            }
+            if (turnstileScriptPromise) {
+                return turnstileScriptPromise;
+            }
+
+            turnstileScriptPromise = new Promise((resolve) => {
+                let completed = false;
+                const finish = (ok) => {
+                    if (completed) return;
+                    completed = true;
+                    resolve(ok);
+                };
+
+                const existing = document.querySelector('script[data-turnstile-script]');
+                const script = existing || document.createElement('script');
+                if (!existing) {
+                    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+                    script.async = true;
+                    script.defer = true;
+                    script.setAttribute('data-turnstile-script', '1');
+                    document.head.appendChild(script);
+                }
+
+                script.addEventListener('load', () => finish(true), { once: true });
+                script.addEventListener('error', () => finish(false), { once: true });
+
+                const started = Date.now();
+                const watcher = setInterval(() => {
+                    if (window.turnstile && typeof window.turnstile.render === 'function') {
+                        clearInterval(watcher);
+                        finish(true);
+                        return;
+                    }
+                    if (Date.now() - started > 12000) {
+                        clearInterval(watcher);
+                        finish(false);
+                    }
+                }, 200);
+            });
+
+            return turnstileScriptPromise;
+        }
+
+        // Turnstile設定を取得して初期化
+        async function initTurnstile() {
+            // Robot認証は廃止
+            turnstileEnabled = false;
+            clearTurnstileSession();
+            setTurnstileStatus('');
+            enableLoginButton();
+        }
+        
+        // Turnstileウィジェットをレンダリング
+        function renderTurnstile(siteKey) {
+            if (!window.turnstile || typeof window.turnstile.render !== 'function') {
+                return;
+            }
+
+            const container = document.getElementById('turnstile-widget');
+            if (!container) return;
+
+            if (turnstileWidgetId && typeof window.turnstile.remove === 'function') {
+                try { window.turnstile.remove(turnstileWidgetId); } catch (e) {}
+            }
+            container.innerHTML = '';
+
+            turnstileWidgetId = window.turnstile.render('#turnstile-widget', {
+                sitekey: siteKey,
+                theme: 'dark',
+                appearance: 'interaction-only',
+                execution: 'execute',
+                callback: onTurnstileSuccess,
+                'error-callback': onTurnstileError,
+                'expired-callback': onTurnstileExpired
+            });
+        }
+        
+        // Turnstile成功時
+        async function onTurnstileSuccess(token) {
+            setTurnstileStatus('セキュリティ確認中...', 'warn');
+            
+            try {
+                const response = await fetch('/api/turnstile/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    setTurnstileStatus('セキュリティ確認が完了しました', 'ok');
+                    resolveTurnstileSession(result.sessionId);
+                } else {
+                    setTurnstileStatus('セキュリティ認証に失敗しました', 'error');
+                    rejectTurnstileSession('セキュリティ認証に失敗しました。再度お試しください');
+                }
+            } catch (e) {
+                console.error('Turnstile verify error:', e);
+                setTurnstileStatus('セキュリティ認証でエラーが発生しました', 'error');
+                rejectTurnstileSession('セキュリティ認証でエラーが発生しました。再試行してください');
+            }
+        }
+        
+        // Turnstileエラー時
+        function onTurnstileError() {
+            setTurnstileStatus('セキュリティ認証に失敗しました', 'error');
+            rejectTurnstileSession('セキュリティ認証に失敗しました。再試行してください');
+        }
+        
+        // Turnstile期限切れ時
+        function onTurnstileExpired() {
+            setTurnstileStatus('セキュリティ認証の有効期限が切れました', 'warn');
+            rejectTurnstileSession('セキュリティ認証の有効期限が切れました。再度お試しください');
+        }
+
+        async function ensureTurnstileSession() {
+            return null;
+        }
+        
+        // ログインボタンを有効化
+        function enableLoginButton(buttonText = 'Discordでログイン') {
+            const btn = document.getElementById('discord-login-btn');
+            if (btn) {
+                btn.disabled = false;
+            }
+            const btnText = document.getElementById('btn-text');
+            if (btnText) {
+                btnText.textContent = buttonText;
+            }
+            setEmailAuthButtonsEnabled(true);
+        }
+        
+        // ログインボタンを無効化
+        function disableLoginButton(buttonText = '処理中...') {
+            const btn = document.getElementById('discord-login-btn');
+            if (btn) {
+                btn.disabled = true;
+            }
+            const btnText = document.getElementById('btn-text');
+            if (btnText) {
+                btnText.textContent = buttonText;
+            }
+            setEmailAuthButtonsEnabled(false);
+        }
+
+        function toggleAltLogin() {
+            const body = document.getElementById('alt-login-body');
+            const textEl = document.getElementById('alt-login-toggle-text');
+            if (!body || !textEl) return;
+
+            const opened = body.classList.toggle('show');
+            textEl.textContent = opened ? 'その他のログイン方法を閉じる' : 'その他のログイン方法を表示';
+        }
+
+        async function loginWithDiscord() {
+            clearLoginError();
+            if (emailAuthBusy || turnstileBusy) return;
+            
+            try {
+                const sessionId = await ensureTurnstileSession();
+                const savedRedirect = getSavedRedirect();
+                let url = '/api/auth/discord';
+                const params = new URLSearchParams();
+
+                if (savedRedirect) {
+                    const absoluteRedirect = toAbsoluteRedirectUrl(savedRedirect);
+                    if (absoluteRedirect) {
+                        params.set('redirect', absoluteRedirect);
+                    }
+                }
+
+                if (sessionId) {
+                    params.set('session', sessionId);
+                }
+
+                if (params.toString()) {
+                    url += '?' + params.toString();
+                }
+
+                clearTurnstileSession();
+                window.location.href = url;
+            } catch (error) {
+                showLoginError(error.message || 'Discordログインの準備に失敗しました');
+            } finally {
+                if (!emailAuthBusy) {
+                    enableLoginButton();
+                }
+            }
+        }
+
+        async function loginWithEmail() {
+            clearLoginError();
+
+            const email = String(document.getElementById('email-auth-email')?.value || '').trim();
+            const password = String(document.getElementById('email-auth-password')?.value || '');
+            if (!email || !password) {
+                showLoginError('メールアドレスとパスワードを入力してください');
+                return;
+            }
+
+            setEmailAuthBusy(true);
+            try {
+                const sessionId = await ensureTurnstileSession();
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        sessionId: sessionId || null
+                    })
+                });
+
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    throw new Error(result.error || 'メールログインに失敗しました');
+                }
+
+                if (result.require2fa && result.pendingToken) {
+                    const savedRedirect = getSavedRedirect();
+                    const params = new URLSearchParams({
+                        require2fa: result.authType || 'totp',
+                        pending: result.pendingToken
+                    });
+                    if (savedRedirect) {
+                        params.set('redirect', savedRedirect);
+                    }
+                    window.location.href = `/auth.html?${params.toString()}`;
+                    return;
+                }
+
+                if (!result.token) {
+                    throw new Error('ログイントークンの取得に失敗しました');
+                }
+                finishLoginWithToken(result.token);
+            } catch (error) {
+                showLoginError(error.message || 'メールログインに失敗しました');
+            } finally {
+                clearTurnstileSession();
+                setEmailAuthBusy(false);
+            }
+        }
+
+        // パスキーでログイン（単独ログイン）
+        async function loginWithPasskey() {
+            try {
+                // WebAuthnがサポートされているか確認
+                if (!window.PublicKeyCredential) {
+                    alert('このブラウザはパスキーに対応していません');
+                    return;
+                }
+                
+                // 認証オプションを取得
+                const startResponse = await fetch('/api/auth/passkey/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!startResponse.ok) {
+                    const err = await startResponse.json();
+                    throw new Error(err.error || 'パスキーログインの開始に失敗しました');
+                }
+                
+                const options = await startResponse.json();
+                const { sessionId, ...publicKeyOptions } = options;
+                
+                // WebAuthn API呼び出し（Discoverable Credentials）
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        ...publicKeyOptions,
+                        challenge: base64URLToBuffer(publicKeyOptions.challenge),
+                        allowCredentials: publicKeyOptions.allowCredentials?.map(c => ({
+                            ...c,
+                            id: base64URLToBuffer(c.id)
+                        })) || []
+                    }
+                });
+                
+                // 認証レスポンスを構築
+                const authResponse = {
+                    id: credential.id,
+                    rawId: bufferToBase64URL(credential.rawId),
+                    response: {
+                        clientDataJSON: bufferToBase64URL(credential.response.clientDataJSON),
+                        authenticatorData: bufferToBase64URL(credential.response.authenticatorData),
+                        signature: bufferToBase64URL(credential.response.signature),
+                        userHandle: credential.response.userHandle ? bufferToBase64URL(credential.response.userHandle) : null
+                    },
+                    type: credential.type
+                };
+                
+                // サーバーで検証
+                const verifyResponse = await fetch('/api/auth/passkey/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId, response: authResponse })
+                });
+                
+                const result = await verifyResponse.json();
+                
+                if (result.success && result.token) {
+                    redirectAfterLogin(result.token);
+                } else {
+                    const errorEl = document.getElementById('error-message');
+                    errorEl.textContent = result.error || 'パスキー認証に失敗しました';
+                    errorEl.classList.add('show');
+                }
+            } catch (error) {
+                const errorEl = document.getElementById('error-message');
+                if (error.name === 'NotAllowedError') {
+                    errorEl.textContent = 'パスキーの認証がキャンセルされました';
+                } else {
+                    errorEl.textContent = 'パスキーログインに失敗しました: ' + error.message;
+                }
+                errorEl.classList.add('show');
+            }
+        }
+        
+        // ============ 2FA認証処理 ============
+        
+        let pendingToken = null;
+        let twofaRedirect = null;
+        let twofaType = null;
+        
+        // 2FA認証が必要か確認
+        function check2FARequired() {
+            const require2fa = urlParams.get('require2fa');
+            pendingToken = urlParams.get('pending');
+            twofaRedirect = sanitizeRedirectTarget(urlParams.get('redirect') || '');
+            
+            if (require2fa && pendingToken) {
+                twofaType = require2fa;
+                show2FAScreen(require2fa);
+                return true;
+            }
+            return false;
+        }
+        
+        // 2FA画面を表示
+        function show2FAScreen(type) {
+            document.getElementById('login-card').style.display = 'none';
+            document.getElementById('twofa-card').style.display = 'block';
+            
+            if (type === 'passkey') {
+                document.getElementById('passkey-auth').style.display = 'block';
+                document.getElementById('totp-auth').style.display = 'none';
+                // 自動でパスキー認証を開始
+                setTimeout(() => authenticatePasskey(), 500);
+            } else {
+                document.getElementById('passkey-auth').style.display = 'none';
+                document.getElementById('totp-auth').style.display = 'block';
+                document.getElementById('totp-code').focus();
+                // パスキーへの切り替えリンクを非表示（TOTPのみの場合）
+                document.getElementById('switch-to-passkey-link').style.display = 'none';
+            }
+        }
+        
+        // パスキーに切り替え
+        function switchToPasskey() {
+            document.getElementById('passkey-auth').style.display = 'block';
+            document.getElementById('totp-auth').style.display = 'none';
+            authenticatePasskey();
+        }
+        
+        // TOTPに切り替え
+        function switchToTOTP() {
+            document.getElementById('passkey-auth').style.display = 'none';
+            document.getElementById('totp-auth').style.display = 'block';
+            document.getElementById('totp-code').focus();
+        }
+        
+        // パスキー認証
+        async function authenticatePasskey() {
+            try {
+                // 認証オプションを取得
+                const response = await fetch('/api/passkeys/authenticate/options', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pendingToken })
+                });
+                
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || '認証オプションの取得に失敗しました');
+                }
+                
+                const options = await response.json();
+                
+                // WebAuthn API呼び出し
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        ...options,
+                        challenge: base64URLToBuffer(options.challenge),
+                        allowCredentials: options.allowCredentials?.map(c => ({
+                            ...c,
+                            id: base64URLToBuffer(c.id)
+                        })) || []
+                    }
+                });
+                
+                // 認証を検証
+                const authResponse = {
+                    id: credential.id,
+                    rawId: bufferToBase64URL(credential.rawId),
+                    response: {
+                        clientDataJSON: bufferToBase64URL(credential.response.clientDataJSON),
+                        authenticatorData: bufferToBase64URL(credential.response.authenticatorData),
+                        signature: bufferToBase64URL(credential.response.signature),
+                        userHandle: credential.response.userHandle ? bufferToBase64URL(credential.response.userHandle) : null
+                    },
+                    type: credential.type
+                };
+                
+                const verifyResponse = await fetch('/api/passkeys/authenticate/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pendingToken, response: authResponse })
+                });
+                
+                const result = await verifyResponse.json();
+                
+                if (result.success && result.token) {
+                    // トークンを保存してリダイレクト
+                    localStorage.setItem('token', result.token);
+                    redirectAfter2FA(result.token);
+                } else {
+                    show2FAError(result.error || '認証に失敗しました');
+                }
+            } catch (error) {
+                if (error.name === 'NotAllowedError') {
+                    show2FAError('パスキーの認証がキャンセルされました');
+                } else {
+                    show2FAError('認証に失敗しました: ' + error.message);
+                }
+            }
+        }
+        
+        // TOTP認証
+        async function authenticateTOTP() {
+            const code = document.getElementById('totp-code').value.trim();
+            
+            if (!code) {
+                show2FAError('認証コードを入力してください');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/totp/authenticate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pendingToken, code })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.token) {
+                    if (result.warning) {
+                        alert(result.warning);
+                    }
+                    localStorage.setItem('token', result.token);
+                    redirectAfter2FA(result.token);
+                } else {
+                    show2FAError(result.error || '認証に失敗しました');
+                }
+            } catch (error) {
+                show2FAError('認証に失敗しました: ' + error.message);
+            }
+        }
+        
+        // 2FAエラー表示
+        function show2FAError(message) {
+            const errorEl = document.getElementById('twofa-error');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+        
+        // 2FA後のリダイレクト
+        function redirectAfter2FA(token) {
+            redirectAfterLogin(token, twofaRedirect);
+        }
+        
+        // Base64URL変換ユーティリティ
+        function base64URLToBuffer(base64url) {
+            const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+            const padding = '='.repeat((4 - base64.length % 4) % 4);
+            const binary = atob(base64 + padding);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+        
+        function bufferToBase64URL(buffer) {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        }
+        
+        // Enterキーでの認証送信
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('totp-code') === document.activeElement) {
+                authenticateTOTP();
+                return;
+            }
+
+            const active = document.activeElement;
+            if (
+                e.key === 'Enter' &&
+                (active?.id === 'email-auth-password' || active?.id === 'email-auth-email')
+            ) {
+                e.preventDefault();
+                loginWithEmail();
+            }
+        });
+        
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 2FA認証が必要かチェック
+            if (!check2FARequired()) {
+                // 通常のTurnstile初期化
+                initTurnstile();
+            }
+        });
+    </script>
+</body>
+</html>

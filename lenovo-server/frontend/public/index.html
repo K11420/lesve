@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LenovoServer - VPSモード対応レンタルサーバー</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/" class="nav-brand">Lenovo<span class="highlight">Server</span></a>
+        </div>
+        <div class="nav-right">
+            <a href="reference.html" class="nav-link" style="color: #888; text-decoration: none; margin-right: 20px;">リファレンス</a>
+            <a href="/dashboard.html" class="btn btn-primary dashboard-entry-link">ダッシュボード</a>
+        </div>
+    </nav>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="brand-name">Lenovo<span class="highlight">Server</span></span>
+            </h1>
+            <p class="hero-subtitle">コンテナの手軽さと、VPSに近い自由度を両立</p>
+            <p class="hero-description">
+                LenovoServerは、1ポート運用（4104）でのSSH接続とVMバックエンド運用に対応しています。
+                Ubuntu環境でWebアプリ、APIサーバー、Botなどをシンプルに運用できます。
+            </p>
+            <div class="hero-buttons">
+                <a href="/dashboard.html" class="btn btn-large btn-primary dashboard-entry-link">
+                    <i class="fas fa-rocket"></i> 今すぐ始める
+                </a>
+                <a href="#features" class="btn btn-large btn-outline">
+                    <i class="fas fa-info-circle"></i> 詳しく見る
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-server">
+                <i class="fab fa-docker"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特徴セクション -->
+    <section id="features" class="features">
+        <h2 class="section-title">特徴</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon rocket">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="feature-title">高速なサーバー</h3>
+                <p class="feature-description">
+                    VMバックエンドで隔離された環境を提供しつつ、管理画面から高速に操作できます。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon uptime">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="feature-title">24時間稼働</h3>
+                <p class="feature-description">
+                    常時監視システムにより、あなたのサービスを24時間365日安定して稼働させることができます。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon code">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 class="feature-title">多言語対応</h3>
+                <p class="feature-description">
+                    Python、JavaScript、Java、Goなど、開発用途に合わせたUbuntu運用が可能です。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon database">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3 class="feature-title">データベース連携</h3>
+                <p class="feature-description">
+                    SQLiteを含む各種データ運用に対応し、バックアップも管理画面から実行できます。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon terminal">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <h3 class="feature-title">SSH & Webターミナル</h3>
+                <p class="feature-description">
+                    SSHは共通ポート4104で接続。ブラウザ上ターミナルも併用できます。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon scale">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="feature-title">スケーラブル</h3>
+                <p class="feature-description">
+                    運用状況に合わせて、実機スペックに基づく構成へ段階的に移行できます。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Lenovo<span class="highlight">Server</span></h3>
+                <p>VMバックエンド対応レンタルサーバーサービス</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>リンク</h4>
+                    <a href="#features">特徴</a>
+                    <a href="/dashboard.html" class="dashboard-entry-link">ダッシュボード</a>
+                </div>
+                <div class="footer-column">
+                    <h4>法的情報</h4>
+                    <a href="terms.html">利用規約</a>
+                    <a href="tokushoho.html">特定商取引法に基づく表記</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 LenovoServer. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        (function setDashboardEntryLinks() {
+            var hasToken = !!localStorage.getItem('token');
+            if (!hasToken) return;
+            var links = document.querySelectorAll('.dashboard-entry-link');
+            links.forEach(function(link) {
+                link.setAttribute('href', '/dashboard.html');
+            });
+        })();
+    </script>
+</body>
+</html>

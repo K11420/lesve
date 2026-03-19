@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特定商取引法に基づく表記 | LenovoServer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --border-color: #2a2a35;
+            --text-primary: #ffffff;
+            --text-secondary: #9aa0ad;
+            --accent: #5865F2;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .logo span { color: var(--accent); }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 26px;
+        }
+
+        .desc {
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        th, td {
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.8;
+        }
+
+        th {
+            width: 30%;
+            background: rgba(88, 101, 242, 0.12);
+            color: #d6dbff;
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        tr:last-child th, tr:last-child td {
+            border-bottom: none;
+        }
+
+        .note {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .links {
+            margin-top: 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            color: #d6dbff;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 22px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back:hover { color: var(--text-primary); }
+
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .card { padding: 14px; }
+            th, td { display: block; width: 100%; }
+            th { border-bottom: none; padding-bottom: 4px; }
+            td { padding-top: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Lenovo<span>Server</span></div>
+            <h1 class="title"><i class="fas fa-scale-balanced"></i> 特定商取引法に基づく表記</h1>
+        </div>
+
+        <div class="card">
+            <p class="desc">
+                本ページは、特定商取引法第11条に基づき、LenovoServerの有料プラン提供に関する情報を表示するものです。
+            </p>
+
+            <table>
+                <tr>
+                    <th>販売事業者</th>
+                    <td>LenovoServer運営事務局</td>
+                </tr>
+                <tr>
+                    <th>運営統括責任者</th>
+                    <td>LenovoServer運営責任者</td>
+                </tr>
+                <tr>
+                    <th>所在地</th>
+                    <td>請求があった場合、遅滞なく開示します。</td>
+                </tr>
+                <tr>
+                    <th>電話番号</th>
+                    <td>請求があった場合、遅滞なく開示します。</td>
+                </tr>
+                <tr>
+                    <th>お問い合わせ先</th>
+                    <td>koutarou114@outlook.jp</td>
+                </tr>
+                <tr>
+                    <th>販売価格</th>
+                    <td>各プランの購入ページおよびダッシュボードに表示される価格（消費税込）</td>
+                </tr>
+                <tr>
+                    <th>商品代金以外の必要料金</th>
+                    <td>インターネット接続料金・通信料金等はお客様負担となります。</td>
+                </tr>
+                <tr>
+                    <th>支払方法</th>
+                    <td>クレジットカード決済（Stripe）</td>
+                </tr>
+                <tr>
+                    <th>支払時期</th>
+                    <td>初回申込時に課金され、以後は契約プランの請求サイクルごとに自動課金されます。</td>
+                </tr>
+                <tr>
+                    <th>サービス提供時期</th>
+                    <td>決済完了後、直ちに利用可能（システム反映に数分かかる場合があります）。</td>
+                </tr>
+                <tr>
+                    <th>動作環境</th>
+                    <td>最新の主要ブラウザ（Chrome / Edge / Firefox / Safari）推奨</td>
+                </tr>
+                <tr>
+                    <th>返品・キャンセル</th>
+                    <td>
+                        デジタルサービスの性質上、契約成立後の返品はできません。<br>
+                        サブスクリプションの解約は、ダッシュボード内「サブスク管理」から次回更新日前まで可能です。<br>
+                        日割り返金・途中返金は、法令上必要な場合を除き行いません。
+                    </td>
+                </tr>
+                <tr>
+                    <th>不良・障害時対応</th>
+                    <td>重大障害時は復旧対応または必要に応じた個別対応を行います。</td>
+                </tr>
+            </table>
+
+            <p class="note">
+                最終改定日: 2026年3月9日
+            </p>
+
+            <div class="links">
+                <a href="/terms.html" target="_blank" rel="noopener noreferrer">利用規約</a>
+                <a href="/dashboard.html">ダッシュボード</a>
+            </div>
+
+            <a href="/" class="back"><i class="fas fa-arrow-left"></i> トップページに戻る</a>
+        </div>
+    </div>
+</body>
+</html>

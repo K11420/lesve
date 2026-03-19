@@ -1,0 +1,171 @@
+{
+  "patches": [
+    {
+      "date": "2026-03-12",
+      "title": "パッチ履歴タブを追加",
+      "summary": "ダッシュボードに「パッチ履歴」タブを追加し、更新記録を一覧で確認できるようにしました。",
+      "type": "feature",
+      "commit": "4f9798c"
+    },
+    {
+      "date": "2026-03-10",
+      "title": "Standard割引クーポンを240か月へ延長",
+      "summary": "Stripe上のStandard向けクーポン期間を240か月へ変更しました。",
+      "type": "billing"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "特商法の連絡先メール更新",
+      "summary": "特定商取引法に基づく表記の問い合わせ先を更新しました。",
+      "type": "policy",
+      "commit": "4638eb0"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "SSHコンソール表示を改善",
+      "summary": "TERMをxterm-256colorへ統一し、接続時の不要メッセージを削減しました。",
+      "type": "improvement",
+      "commit": "cc7f26f"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "ttyd接続後にLinuxログインを省略",
+      "summary": "ttyd認証後すぐに対象ユーザーのシェルへ入るように変更しました。",
+      "type": "fix",
+      "commit": "19dcf80"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "trycloudflare URL判定を修正",
+      "summary": "api.trycloudflare.comを除外し、実際の公開URLのみ返すように修正しました。",
+      "type": "fix",
+      "commit": "0f7af1f"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "ttydポート競合時の自動回避",
+      "summary": "既定ポート使用中でも空きポートへフォールバックしてトンネル生成できるようにしました。",
+      "type": "fix",
+      "commit": "48609f6"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VM向けttyd + trycloudflare導入",
+      "summary": "VM初期導入スクリプトと管理画面からのWebターミナルリンク発行を実装しました。",
+      "type": "feature",
+      "commit": "9c69c94"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "特商法ページ新設と利用規約改定",
+      "summary": "特定商取引法ページを追加し、サブスク運用に合わせて利用規約を更新しました。",
+      "type": "policy",
+      "commit": "a143b1b"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VMファイルAPIをユーザーホーム基準へ調整",
+      "summary": "Webファイル操作を/home配下で安全に扱えるように修正しました。",
+      "type": "fix",
+      "commit": "51b1cd9"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "Webターミナルの表示とカレントディレクトリ修正",
+      "summary": "コマンドエコー挙動とホームディレクトリ遷移の不整合を解消しました。",
+      "type": "fix",
+      "commit": "04c3ea7"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VM Webターミナルの初期位置修正",
+      "summary": "接続直後の開始ディレクトリをユーザーホームに統一しました。",
+      "type": "fix",
+      "commit": "e793f3a"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VMコマンド実行ユーザーを統一",
+      "summary": "WebターミナルをサーバーのSSHユーザー権限で実行するように変更しました。",
+      "type": "improvement",
+      "commit": "b345c9d"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "サブスク管理と旧プラン再適用を追加",
+      "summary": "Stripeポータル遷移、解約導線、プラン再適用ボタンを実装しました。",
+      "type": "billing",
+      "commit": "62c17db"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VMターミナルTTYブリッジ修正",
+      "summary": "WebターミナルのTTY不具合を修正し、入力安定性を改善しました。",
+      "type": "fix",
+      "commit": "b8ec347"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "Stripe価格IDと3か月無料クーポン対応",
+      "summary": "Standard/Pro価格IDの適用と、Standard向け3か月無料クーポン導線を実装しました。",
+      "type": "billing",
+      "commit": "2543132"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VM Webターミナル/ファイル機能を追加",
+      "summary": "VMバックエンドでのWebターミナルとファイル操作を正式対応しました。",
+      "type": "feature",
+      "commit": "e9575d8"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "manageルート互換を追加",
+      "summary": "manage画面へ到達できない問題を解消する互換ルートを追加しました。",
+      "type": "fix",
+      "commit": "a61f366"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VM起動パスと詳細画面の信頼性改善",
+      "summary": "起動処理と詳細UIの不安定な挙動を修正しました。",
+      "type": "fix",
+      "commit": "03de1c0"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VMスペック同期メンテスクリプト追加",
+      "summary": "libvirt実値とDB設定のズレを解消する同期スクリプトを追加しました。",
+      "type": "maintenance",
+      "commit": "af5e4e1"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "ルート遷移とスペック表示の明確化",
+      "summary": "/→/dashboardの導線改善と、実機値/設定値の見分けやすさを向上しました。",
+      "type": "improvement",
+      "commit": "35fd2d0"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "ダッシュボードUI/UX改善",
+      "summary": "サーバー詳細の構成整理と、メトリクス表示の読みやすさを改善しました。",
+      "type": "improvement",
+      "commit": "b75c2f1"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "4104単一ポート運用を有効化",
+      "summary": "SSHゲートウェイのルーティングを調整し、単一ポート運用に対応しました。",
+      "type": "networking",
+      "commit": "412cb02"
+    },
+    {
+      "date": "2026-03-09",
+      "title": "VPS移行・バックアップ基盤整備",
+      "summary": "KVM/libvirt移行とテナントバックアップの運用スクリプトを追加しました。",
+      "type": "infrastructure",
+      "commit": "e6821ee"
+    }
+  ]
+}
